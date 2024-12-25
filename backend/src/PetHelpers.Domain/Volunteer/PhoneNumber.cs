@@ -6,7 +6,7 @@ public class PhoneNumber : ValueObject
 {
     private PhoneNumber(string number) => Number = number;
 
-    public string Number { get; private set;}
+    public string Number { get; }
     
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {

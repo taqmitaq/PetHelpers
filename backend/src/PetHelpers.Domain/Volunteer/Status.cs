@@ -12,7 +12,7 @@ public class Status : ValueObject
 
     private Status(string value) => Value = value;
 
-    public string Value { get; private set; }
+    public string Value { get; }
     
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {

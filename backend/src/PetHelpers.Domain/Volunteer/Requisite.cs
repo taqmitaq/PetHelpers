@@ -10,8 +10,8 @@ public class Requisite : ValueObject
         Description = description;
     }
     
-    public string Title { get; private set; }
-    public string Description { get; private set; }
+    public string Title { get; }
+    public string Description { get; }
     
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
