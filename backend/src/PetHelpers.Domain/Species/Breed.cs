@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared.Ids;
 
 namespace PetHelpers.Domain.Species;
 
-public class Breed : Entity<Guid>
+public class Breed : Entity<BreedId>
 {
     private Breed() { }
     

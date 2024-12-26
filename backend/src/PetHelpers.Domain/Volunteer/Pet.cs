@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared.Ids;
 
 namespace PetHelpers.Domain.Volunteer;
 
-public class Pet : Entity<Guid>
+public class Pet : Entity<PetId>
 {
     private readonly List<Requisite> _requisites = [];
     
