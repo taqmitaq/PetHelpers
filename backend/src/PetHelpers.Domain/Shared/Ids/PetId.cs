@@ -2,7 +2,7 @@
 
 namespace PetHelpers.Domain.Shared.Ids;
 
-public class PetId : ComparableValueObject
+public sealed class PetId : ComparableValueObject
 {
     private PetId(Guid value) => Value = value;
     
