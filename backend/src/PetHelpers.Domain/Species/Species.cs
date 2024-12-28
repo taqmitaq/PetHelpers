@@ -3,7 +3,7 @@ using PetHelpers.Domain.Shared.Ids;
 
 namespace PetHelpers.Domain.Species;
 
-public class Species : Entity<SpeciesId>
+public sealed class Species : Entity<SpeciesId>
 {
     private readonly List<Breed> _breeds = [];
     

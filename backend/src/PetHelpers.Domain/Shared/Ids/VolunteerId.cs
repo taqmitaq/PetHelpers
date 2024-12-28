@@ -4,12 +4,13 @@ namespace PetHelpers.Domain.Shared.Ids;
 
 public class VolunteerId : ComparableValueObject
 {
-    public VolunteerId(Guid value) => Value = value;
+    private VolunteerId(Guid value) => Value = value;
     
     public Guid Value { get; }
     
     public static VolunteerId NewVolunteerId() => new(Guid.NewGuid());
     public static VolunteerId Empty() => new(Guid.Empty);
+    public static VolunteerId Create(Guid value) => new(value);
     
     protected override IEnumerable<IComparable> GetComparableEqualityComponents()
     {
