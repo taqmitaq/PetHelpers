@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared.Ids;
 
 namespace PetHelpers.Domain.Volunteer;
 
-public class Volunteer : Entity<Guid>
+public sealed class Volunteer : Entity<VolunteerId>
 {
     private readonly List<SocialMedia> _socialMedias = [];
     private readonly List<Requisite> _requisites = [];
