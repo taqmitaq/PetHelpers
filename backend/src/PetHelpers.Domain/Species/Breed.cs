@@ -6,8 +6,10 @@ namespace PetHelpers.Domain.Species;
 public sealed class Breed : Entity<BreedId>
 {
     public Species Species { get; private set; }
-    
-    private Breed() { }
-    
+
+    private Breed()
+    {
+    }
+
     public string Title { get; private set; }
 }

@@ -8,9 +8,11 @@ public sealed class Volunteer : Entity<VolunteerId>
     private readonly List<SocialMedia> _socialMedias = [];
     private readonly List<Requisite> _requisites = [];
     private readonly List<Pet> _ownedPets = [];
-    
-    private Volunteer() { }
-    
+
+    private Volunteer()
+    {
+    }
+
     public int YearsOfExperience { get; private set; }
     public int PetsFoundHome { get; private set; }
     public int PetsLookingForHome { get; private set; }

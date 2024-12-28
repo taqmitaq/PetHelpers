@@ -9,10 +9,10 @@ public class SpeciesAndBreed : ValueObject
         SpeciesId = speciesId;
         BreedId = breedId;
     }
-    
+
     public Guid SpeciesId { get; }
     public Guid BreedId { get; }
-    
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return SpeciesId;

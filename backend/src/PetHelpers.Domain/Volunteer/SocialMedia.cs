@@ -9,7 +9,7 @@ public class SocialMedia : ValueObject
         Title = title;
         Link = link;
     }
-    
+
     public string Title { get; }
     public string Link { get; }
 
