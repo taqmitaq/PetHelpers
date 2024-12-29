@@ -1,0 +1,227 @@
+[*.{xml,csproj,props,targets}]
+
+indent_style = space
+indent_size = 2
+
+[*.cs]
+
+indent_style = space
+indent_size = 4
+
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = none
+
+# CA1816: Dispose methods should call SuppressFinalize
+dotnet_diagnostic.CA1816.severity = none
+
+# RS2008 Enable analyzer release tracking for the analyzer project
+dotnet_diagnostic.RS2008.severity = none
+
+#################
+# Resharper Rules
+#################
+
+resharper_simplify_linq_expression_use_all_highlighting = do_not_show
+resharper_align_multiline_binary_expressions_chain = false
+resharper_align_multiline_statement_conditions = false
+
+###########
+# IDE Rules
+###########
+
+dotnet_sort_system_directives_first = true
+csharp_indent_case_contents_when_block = false
+csharp_style_namespace_declarations = file_scoped
+
+# IDE0005: Remove unnecessary import
+dotnet_diagnostic.IDE0005.severity = warning
+
+# IDE0035: Remove unreachable code
+dotnet_diagnostic.IDE0035.severity = warning
+
+# IDE0036: Order modifiers
+dotnet_diagnostic.IDE0036.severity = warning
+
+# IDE0051: Remove unused private member
+dotnet_diagnostic.IDE0051.severity = warning
+
+# IDE0052: Remove unread private member
+dotnet_diagnostic.IDE0052.severity = warning
+
+# IDE0055: Fix formatting
+dotnet_diagnostic.IDE0055.severity = warning
+
+# IDE0060: Remove unused parameter
+dotnet_diagnostic.IDE0060.severity = warning
+
+# IDE0079: Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = warning
+
+# IDE0080: Remove unnecessary suppression operator
+dotnet_diagnostic.IDE0080.severity = warning
+
+# IDE0100: Remove unnecessary equality operator
+dotnet_diagnostic.IDE0100.severity = warning
+
+# IDE0110: Remove unnecessary discard
+dotnet_diagnostic.IDE0110.severity = warning
+
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = warning
+
+# IDE0161: Use file-scoped namespace
+dotnet_diagnostic.IDE0161.severity = warning
+
+##############################
+# StyleCop - Readability Rules
+##############################
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# SX1101: Do not prefix local calls with this
+dotnet_diagnostic.SX1101.severity = warning
+
+###########################
+# StyleCop - Ordering Rules
+###########################
+
+dotnet_diagnostic.SA1200.severity = none
+
+# SA1201: Elements shoud appear in the correct order
+dotnet_diagnostic.SA1201.severity = none
+
+# SA1202: Elements should be ordered by access
+dotnet_diagnostic.SA1202.severity = none
+
+# SA1204: Static members should appear before non-static members
+dotnet_diagnostic.SA1204.severity = none
+
+# SA1206: The keywords within the declaration of an element do not follow a standard ordering scheme
+# current StyleCop version has bug with 'required' keyword
+# we use IDE0036 instead
+dotnet_diagnostic.SA1206.severity = none
+
+#########################
+# StyleCop - Naming Rules
+#########################
+
+# SA1309: Field names should not begin with underscore
+dotnet_diagnostic.SA1309.severity = none
+
+# SX1309: Field names should begin with underscore
+dotnet_diagnostic.SX1309.severity = warning
+
+# SX1309S: Static field names should begin with underscore
+dotnet_diagnostic.SX1309S.severity = warning
+
+##################################
+# StyleCop - Maintainability Rules
+##################################
+
+# SA1407: Arithmetic expressions should declare precedence
+dotnet_diagnostic.SA1407.severity = none
+
+# SA1408: Conditional expressions should declare precedence
+dotnet_diagnostic.SA1408.severity = none
+
+#########################
+# StyleCop - Layout Rules
+#########################
+
+# SA1503: Braces should not be omitted
+dotnet_diagnostic.SA1503.severity = none
+
+# SA1516: Elements should be separated by blank line
+dotnet_diagnostic.SA1516.severity = none
+
+################################
+# StyleCop - Documentation Rules
+################################
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1601: Partial elements should be documented
+dotnet_diagnostic.SA1601.severity = none
+
+# SA1602: Enumeration items should be documented
+dotnet_diagnostic.SA1602.severity = none
+
+# SA1611: Element parameters should be documented
+dotnet_diagnostic.SA1611.severity = none
+
+# SA1615: Element return value should be documented
+dotnet_diagnostic.SA1615.severity = none
+
+# SA1618: Generic type parameters should be documented
+dotnet_diagnostic.SA1618.severity = none
+
+# SA1619: Generic type parameters should be documented in partial class
+dotnet_diagnostic.SA1619.severity = none
+
+# SA1623: Property summary documentation should match accessors
+dotnet_diagnostic.SA1623.severity = none
+
+# SA1624: Property summary documentation should omit set accessor with restricted access
+dotnet_diagnostic.SA1624.severity = none
+
+# SA1629: Documentation text should end with a period
+dotnet_diagnostic.SA1629.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+##################
+# Roslynator Rules
+##################
+
+roslynator_doc_comment_summary_style = multi_line
+
+# RCS1253: Format documentation comment summary
+dotnet_diagnostic.RCS1253.severity = warning
+
+# RCS1194: Implement exception constructors
+dotnet_diagnostic.RCS1194.severity = none
+
+##################################
+# FluentAssertions Analyzers Rules
+##################################
+
+dotnet_analyzer_diagnostic.category-FluentAssertionTips.severity = warning
+dotnet_analyzer_diagnostic.category-FluentAssertionCodeSmells.severity = warning
+dotnet_diagnostic.CollectionShouldContainSingle.severity = none
+
+#############
+# Sonar Rules
+#############
+
+# S2699: Tests should include assertions
+dotnet_diagnostic.S2699.severity = none
+
+# S3235: Redundant parentheses should not be used
+dotnet_diagnostic.S3235.severity = warning
+
+# S3246: Generic type parameters should be co/contravariant when possible
+dotnet_diagnostic.S3246.severity = none
+
+# S3257: Declarations and initializations should be as concise as possible
+dotnet_diagnostic.S3257.severity = warning
+
+# S3267: Loops should be simplified with "LINQ" expressions
+dotnet_diagnostic.S3267.severity = none
+
+# S3881: "IDisposable" should be implemented correctly
+dotnet_diagnostic.S3881.severity = none
+
+# S4136: Method overloads should be grouped together
+dotnet_diagnostic.S4136.severity = none
+
+# S3925: "ISerializable" should be implemented correctly
+dotnet_diagnostic.S3925.severity = none
+
+[{**/*Tests.cs}]
+# VSTHRD200: Use "Async" suffix in names of methods that return an awaitable type
+dotnet_diagnostic.VSTHRD200.severity = none
+# RS0030: Do not use banned APIs
+dotnet_diagnostic.RS0030.severity = none

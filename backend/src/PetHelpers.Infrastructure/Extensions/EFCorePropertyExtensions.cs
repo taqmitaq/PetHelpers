@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace PetHelpers.Infrastructure.Extensions;
 
-public static class EfCorePropertyExtensions
+public static class EFCorePropertyExtensions
 {
     public static PropertyBuilder<DateTime> SetDefaultDateTimeKind(
         this PropertyBuilder<DateTime> builder, DateTimeKind kind)
@@ -13,7 +13,7 @@ public static class EfCorePropertyExtensions
             v => v.ToUniversalTime(),
             v => DateTime.SpecifyKind(v, kind));
     }
-    
+
     public static PropertyBuilder<TValueObject> JsonValueObjectConversion<TValueObject>(
         this PropertyBuilder<TValueObject> builder)
     {
@@ -21,7 +21,7 @@ public static class EfCorePropertyExtensions
             v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
             v => JsonSerializer.Deserialize<TValueObject>(v, JsonSerializerOptions.Default)!);
     }
-    
+
     public static PropertyBuilder<IReadOnlyList<TValueObject>> JsonValueObjectCollectionConversion<TValueObject>(
         this PropertyBuilder<IReadOnlyList<TValueObject>> builder)
     {

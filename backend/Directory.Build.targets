@@ -1,0 +1,9 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Workaround for incorrect settings in Text.Analyzers package -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
+  </PropertyGroup>
+
+</Project>

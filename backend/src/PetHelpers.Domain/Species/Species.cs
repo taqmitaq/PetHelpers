@@ -6,9 +6,11 @@ namespace PetHelpers.Domain.Species;
 public sealed class Species : Entity<SpeciesId>
 {
     private readonly List<Breed> _breeds = [];
-    
-    private Species() { }
-    
+
+    private Species()
+    {
+    }
+
     public string Title { get; private set; }
     public IReadOnlyList<Breed> Breeds => _breeds;
 }
