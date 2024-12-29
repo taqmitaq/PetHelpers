@@ -13,4 +13,14 @@ public sealed class Species : Entity<SpeciesId>
 
     public string Title { get; private set; }
     public IReadOnlyList<Breed> Breeds => _breeds;
+
+    public static Result<Species, string> Create(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            return "Title cannot be empty.";
+
+        var species = new Species { Title = title };
+
+        return Result.Success<Species, string>(species);
+    }
 }

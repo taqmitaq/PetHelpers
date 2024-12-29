@@ -52,7 +52,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(p => p.IsVaccinated)
             .IsRequired();
 
-        builder.Property(p => p.Birthdate)
+        builder.Property(p => p.BirthDate)
             .IsRequired();
 
         builder.Property(p => p.CreationDate)

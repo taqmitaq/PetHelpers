@@ -24,4 +24,35 @@ public sealed class Volunteer : Entity<VolunteerId>
     public IReadOnlyList<SocialMedia> SocialMedias => _socialMedias;
     public IReadOnlyList<Requisite> Requisites => _requisites;
     public IReadOnlyList<Pet> OwnedPets => _ownedPets;
+
+    public static Result<Volunteer, string> Create(
+        int yearsOfExperience,
+        int petsFoundHome,
+        int petsLookingForHome,
+        int petsInTreatment,
+        string description,
+        string email,
+        FullName fullName,
+        PhoneNumber phoneNumber)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+            return "Description cannot be empty.";
+
+        if (string.IsNullOrWhiteSpace(email))
+            return "Email cannot be empty.";
+
+        var volunteer = new Volunteer
+        {
+            YearsOfExperience = yearsOfExperience,
+            PetsFoundHome = petsFoundHome,
+            PetsLookingForHome = petsLookingForHome,
+            PetsInTreatment = petsInTreatment,
+            Description = description,
+            Email = email,
+            FullName = fullName,
+            PhoneNumber = phoneNumber,
+        };
+
+        return Result.Success<Volunteer, string>(volunteer);
+    }
 }

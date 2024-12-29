@@ -9,10 +9,10 @@ public class Requisite : ValueObject
         Title = title;
         Description = description;
     }
-    
+
     public string Title { get; }
     public string Description { get; }
-    
+
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
         yield return Title;

@@ -12,4 +12,14 @@ public sealed class Breed : Entity<BreedId>
     }
 
     public string Title { get; private set; }
+
+    public static Result<Breed, string> Create(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            return "Title cannot be empty.";
+
+        var breed = new Breed { Title = title };
+
+        return Result.Success<Breed, string>(breed);
+    }
 }
