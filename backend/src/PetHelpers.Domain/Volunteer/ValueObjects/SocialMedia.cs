@@ -5,21 +5,18 @@ namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
 public class SocialMedia : ValueObject
 {
-    private SocialMedia(string title, string link) //трайнуть конверсию коллекций с типом Title
+    private SocialMedia(Title title, string link)
     {
         Title = title;
         Link = link;
     }
 
-    public string Title { get; }
+    public Title Title { get; }
 
     public string Link { get; }
 
-    public static Result<SocialMedia, string> Create(string title, string link)
+    public static Result<SocialMedia, string> Create(Title title, string link)
     {
-        if (string.IsNullOrWhiteSpace(title))
-            return "Title cannot be empty.";
-
         if (string.IsNullOrWhiteSpace(link))
             return "Link cannot be empty.";
 

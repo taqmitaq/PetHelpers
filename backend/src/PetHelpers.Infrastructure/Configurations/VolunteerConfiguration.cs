@@ -66,7 +66,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         {
             b.IsRequired();
             b.Property(e => e.Address)
-                .HasColumnName("address");
+                .HasColumnName("email");
         });
 
         builder.ComplexProperty(v => v.Description, b =>
