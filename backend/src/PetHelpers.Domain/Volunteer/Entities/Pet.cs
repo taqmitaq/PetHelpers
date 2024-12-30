@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using PetHelpers.Domain.Shared.Ids;
+using PetHelpers.Domain.Shared.ValueObjects;
+using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Domain.Volunteer;
+namespace PetHelpers.Domain.Volunteer.Entities;
 
 public sealed class Pet : Entity<PetId>
 {
@@ -13,55 +15,54 @@ public sealed class Pet : Entity<PetId>
     {
     }
 
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public string Color { get; private set; }
-    public string HealthInfo { get; private set; }
-    public string Location { get; private set; }
     public double Weight { get; private set; }
+
     public double Height { get; private set; }
+
     public bool IsCastrated { get; private set; }
+
     public bool IsVaccinated { get; private set; }
+
     public DateOnly BirthDate { get; private set; }
+
     public DateTime CreationDate { get; private set; }
+
+    public PetName PetName { get; private set; }
+
+    public Description Description { get; private set; }
+
+    public Color Color { get; private set; }
+
+    public HealthInfo HealthInfo { get; private set; }
+
+    public Location Location { get; private set; }
+
     public Status HelpStatus { get; private set; }
+
     public SpeciesAndBreed SpeciesAndBreed { get; private set; }
+
     public PhoneNumber OwnersPhoneNumber { get; private set; }
+
     public IReadOnlyList<Requisite> Requisites => _requisites;
 
     public static Result<Pet, string> Create(
-        string name,
-        string description,
-        string color,
-        string healthInfo,
-        string location,
         double height,
         double weight,
         bool isCastrated,
         bool isVaccinated,
-        DateOnly birthdate,
+        DateOnly birthDate,
+        PetName petName,
+        Description description,
+        Color color,
+        HealthInfo healthInfo,
+        Location location,
         Status helpStatus,
         SpeciesAndBreed speciesAndBreed,
         PhoneNumber ownersPhoneNumber)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            return "Name cannot be empty.";
-
-        if (string.IsNullOrWhiteSpace(description))
-            return "description cannot be empty.";
-
-        if (string.IsNullOrWhiteSpace(color))
-            return "color cannot be empty.";
-
-        if (string.IsNullOrWhiteSpace(healthInfo))
-            return "healthInfo cannot be empty.";
-
-        if (string.IsNullOrWhiteSpace(location))
-            return "location cannot be empty.";
-
         var pet = new Pet
         {
-            Name = name,
+            PetName = petName,
             Description = description,
             Color = color,
             HealthInfo = healthInfo,
@@ -70,7 +71,7 @@ public sealed class Pet : Entity<PetId>
             Weight = weight,
             IsCastrated = isCastrated,
             IsVaccinated = isVaccinated,
-            BirthDate = birthdate,
+            BirthDate = birthDate,
             CreationDate = DateTime.UtcNow,
             HelpStatus = helpStatus,
             SpeciesAndBreed = speciesAndBreed,

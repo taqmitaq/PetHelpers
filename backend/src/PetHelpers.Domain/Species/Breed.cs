@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetHelpers.Domain.Shared.Ids;
+using PetHelpers.Domain.Shared.ValueObjects;
 
 namespace PetHelpers.Domain.Species;
 
@@ -11,11 +12,11 @@ public sealed class Breed : Entity<BreedId>
     {
     }
 
-    public string Title { get; private set; }
+    public Title Title { get; private set; }
 
-    public static Result<Breed, string> Create(string title)
+    public static Result<Breed, string> Create(Title title)
     {
-        if (string.IsNullOrWhiteSpace(title))
+        if (string.IsNullOrWhiteSpace(title.Text))
             return "Title cannot be empty.";
 
         var breed = new Breed { Title = title };

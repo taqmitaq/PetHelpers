@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using PetHelpers.Domain.Shared.Ids;
+using PetHelpers.Domain.Shared.ValueObjects;
+using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Domain.Volunteer;
+namespace PetHelpers.Domain.Volunteer.Entities;
 
 public sealed class Volunteer : Entity<VolunteerId>
 {
@@ -14,15 +16,25 @@ public sealed class Volunteer : Entity<VolunteerId>
     }
 
     public int YearsOfExperience { get; private set; }
+
     public int PetsFoundHome { get; private set; }
+
     public int PetsLookingForHome { get; private set; }
+
     public int PetsInTreatment { get; private set; }
-    public string Description { get; private set; }
-    public string Email { get; private set; }
+
+    public Description Description { get; private set; }
+
+    public Email Email { get; private set; }
+
     public FullName FullName { get; private set; }
+
     public PhoneNumber PhoneNumber { get; private set; }
-    public IReadOnlyList<SocialMedia> SocialMedias => _socialMedias;
-    public IReadOnlyList<Requisite> Requisites => _requisites;
+
+    public IReadOnlyList<SocialMedia> SocialMedias => _socialMedias; // возможно нужно переконфигурировать конвертер
+
+    public IReadOnlyList<Requisite> Requisites => _requisites; // возможно нужно переконфигурировать конвертер
+
     public IReadOnlyList<Pet> OwnedPets => _ownedPets;
 
     public static Result<Volunteer, string> Create(
@@ -30,17 +42,11 @@ public sealed class Volunteer : Entity<VolunteerId>
         int petsFoundHome,
         int petsLookingForHome,
         int petsInTreatment,
-        string description,
-        string email,
+        Description description,
+        Email email,
         FullName fullName,
         PhoneNumber phoneNumber)
     {
-        if (string.IsNullOrWhiteSpace(description))
-            return "Description cannot be empty.";
-
-        if (string.IsNullOrWhiteSpace(email))
-            return "Email cannot be empty.";
-
         var volunteer = new Volunteer
         {
             YearsOfExperience = yearsOfExperience,

@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetHelpers.Domain.Volunteer;
+namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
 public class Status : ValueObject
 {
@@ -13,6 +13,20 @@ public class Status : ValueObject
     private Status(string value) => Value = value;
 
     public string Value { get; }
+
+    public static Result<Status, string> Create(string value)
+    {
+        value = value.Trim();
+
+        if (_all.Any(s => string.Equals(value, s.Value, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            var status = new Status(value);
+
+            return Result.Success<Status, string>(status);
+        }
+
+        return "Status value is invalid";
+    }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {

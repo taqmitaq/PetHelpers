@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetHelpers.Domain.Species;
-using PetHelpers.Domain.Volunteer;
+using PetHelpers.Domain.Volunteer.Entities;
 
 namespace PetHelpers.Infrastructure;
 
