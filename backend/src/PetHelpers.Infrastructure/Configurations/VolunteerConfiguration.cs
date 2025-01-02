@@ -39,10 +39,12 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             .IsRequired();
 
         builder.Property(v => v.Requisites)
-            .JsonValueObjectCollectionConversion();
+            .JsonValueObjectCollectionConversion()
+            .HasColumnType("jsonb");
 
         builder.Property(v => v.SocialMedias)
-            .JsonValueObjectCollectionConversion();
+            .JsonValueObjectCollectionConversion()
+            .HasColumnType("jsonb");
 
         builder.ComplexProperty(v => v.FullName, b =>
         {
@@ -73,7 +75,8 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         {
             b.IsRequired();
             b.Property(d => d.Text)
-                .HasColumnName("description");
+                .HasColumnName("description")
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
         });
     }
 }

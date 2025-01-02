@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
@@ -18,16 +19,16 @@ public class Email : ValueObject
         Address = address;
     }
 
-    public static Result<Email, string> Create(string address)
+    public static Result<Email, Error> Create(string address)
     {
         address = address.Trim();
 
         if (!Regex.Match(address, VALID_EMAIL_PATTERN, RegexOptions.IgnoreCase).Success)
-            return "Invalid email address";
+            return Errors.General.ValueIsInvalid(nameof(Email));
 
         var email = new Email(address);
 
-        return Result.Success<Email, string>(email);
+        return email;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
@@ -14,7 +15,7 @@ public class Status : ValueObject
 
     public string Value { get; }
 
-    public static Result<Status, string> Create(string value)
+    public static Result<Status, Error> Create(string value)
     {
         value = value.Trim();
 
@@ -22,10 +23,10 @@ public class Status : ValueObject
         {
             var status = new Status(value);
 
-            return Result.Success<Status, string>(status);
+            return status;
         }
 
-        return "Status value is invalid";
+        return Errors.General.ValueIsInvalid(nameof(Status));
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

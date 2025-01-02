@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
-using PetHelpers.Domain.Species;
+using PetHelpers.Domain.Species.Entities;
 
 namespace PetHelpers.Infrastructure.Configurations;
 

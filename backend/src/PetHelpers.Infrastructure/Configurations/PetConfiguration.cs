@@ -41,21 +41,23 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired();
 
         builder.Property(p => p.Requisites)
-                    .JsonValueObjectCollectionConversion();
+            .JsonValueObjectCollectionConversion()
+            .HasColumnType("jsonb");
 
         builder.ComplexProperty(p => p.PetName, b =>
         {
             b.IsRequired();
             b.Property(pn => pn.Value)
                 .HasColumnName("name")
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);;
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
         });
 
         builder.ComplexProperty(p => p.Description, b =>
         {
             b.IsRequired();
             b.Property(p => p.Text)
-                .HasColumnName("description");
+                .HasColumnName("description")
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
         });
 
         builder.ComplexProperty(p => p.Color, b =>
@@ -107,9 +109,6 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
             b.Property(l => l.PostalCode)
                 .HasColumnName("postal_code")
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-            b.Property(l => l.Description)
-                .HasColumnName("description")
                 .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
         });
     }

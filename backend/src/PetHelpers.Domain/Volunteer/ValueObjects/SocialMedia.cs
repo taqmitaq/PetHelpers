@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using PetHelpers.Domain.Shared.ValueObjects;
+using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
@@ -15,14 +15,14 @@ public class SocialMedia : ValueObject
 
     public string Link { get; }
 
-    public static Result<SocialMedia, string> Create(Title title, string link)
+    public static Result<SocialMedia, Error> Create(Title title, string link)
     {
         if (string.IsNullOrWhiteSpace(link))
-            return "Link cannot be empty.";
+            return Errors.General.ValueIsRequired(nameof(Link));
 
         var socialMedia = new SocialMedia(title, link);
 
-        return Result.Success<SocialMedia, string>(socialMedia);
+        return socialMedia;
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

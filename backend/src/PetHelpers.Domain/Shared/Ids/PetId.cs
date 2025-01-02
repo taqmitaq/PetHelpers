@@ -8,14 +8,17 @@ public sealed class PetId : ComparableValueObject
 
     public Guid Value { get; }
 
-    public static implicit operator Guid(PetId value) => value.Value;
+    public static implicit operator Guid(PetId value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        return value.Value;
+    }
 
-    public static PetId NewPetId() => new(Guid.NewGuid());
+    public static PetId NewId() => new(Guid.NewGuid());
 
     public static PetId Empty() => new(Guid.Empty);
 
     public static PetId Create(Guid value) => new(value);
-
 
     protected override IEnumerable<IComparable> GetComparableEqualityComponents()
     {

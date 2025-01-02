@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetHelpers.Domain.Shared.ValueObjects;
+namespace PetHelpers.Domain.Shared;
 
 public class Title : ComparableValueObject
 {
@@ -8,14 +8,16 @@ public class Title : ComparableValueObject
 
     public string Text { get; }
 
-    public static Result<Title, string> Create(string text)
+    public static implicit operator string(Title title) => title.Text;
+
+    public static implicit operator Title(string value) => Create(value).Value;
+
+    public static Result<Title, Error> Create(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
-            return "Title cannot be empty.";
+            return Errors.General.ValueIsInvalid(nameof(Title));
 
-        var title = new Title(text);
-
-        return Result.Success<Title, string>(title);
+        return new Title(text);
     }
 
     protected override IEnumerable<IComparable> GetComparableEqualityComponents()

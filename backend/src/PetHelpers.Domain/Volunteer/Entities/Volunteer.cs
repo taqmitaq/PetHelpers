@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
-using PetHelpers.Domain.Shared.ValueObjects;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
 namespace PetHelpers.Domain.Volunteer.Entities;
@@ -12,6 +12,7 @@ public sealed class Volunteer : Entity<VolunteerId>
     private readonly List<Pet> _ownedPets = [];
 
     private Volunteer()
+        : base(VolunteerId.NewId())
     {
     }
 
@@ -31,9 +32,9 @@ public sealed class Volunteer : Entity<VolunteerId>
 
     public PhoneNumber PhoneNumber { get; private set; }
 
-    public IReadOnlyList<SocialMedia> SocialMedias => _socialMedias; // возможно нужно переконфигурировать конвертер
+    public IReadOnlyList<SocialMedia> SocialMedias => _socialMedias;
 
-    public IReadOnlyList<Requisite> Requisites => _requisites; // возможно нужно переконфигурировать конвертер
+    public IReadOnlyList<Requisite> Requisites => _requisites;
 
     public IReadOnlyList<Pet> OwnedPets => _ownedPets;
 
@@ -60,5 +61,13 @@ public sealed class Volunteer : Entity<VolunteerId>
         };
 
         return Result.Success<Volunteer, string>(volunteer);
+    }
+
+    public UnitResult<Error> AddPet(Pet pet)
+    {
+        // Валидация
+        _ownedPets.Add(pet);
+
+        return UnitResult.Success<Error>();
     }
 }

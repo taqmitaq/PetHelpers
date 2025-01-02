@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
@@ -8,14 +9,14 @@ public class PetName : ValueObject
 
     public string Value { get; }
 
-    public static Result<PetName, string> Create(string name)
+    public static Result<PetName, Error> Create(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return "Pet's name cannot be empty.";
+            return Errors.General.ValueIsRequired(nameof(PetName));
 
         var petName = new PetName(name);
 
-        return Result.Success<PetName, string>(petName);
+        return petName;
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetHelpers.Domain.Shared.ValueObjects;
+namespace PetHelpers.Domain.Shared;
 
 public class Description : ComparableValueObject
 {
@@ -8,14 +8,14 @@ public class Description : ComparableValueObject
 
     public string Text { get; }
 
-    public static Result<Description, string> Create(string text)
+    public static Result<Description, Error> Create(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
-            return "Description cannot be empty.";
+            return Errors.General.ValueIsRequired(nameof(Description));
 
         var description = new Description(text);
 
-        return Result.Success<Description, string>(description);
+        return description;
     }
 
     protected override IEnumerable<IComparable> GetComparableEqualityComponents()

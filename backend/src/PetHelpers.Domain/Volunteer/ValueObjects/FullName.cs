@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
@@ -14,17 +15,17 @@ public class FullName : ValueObject
 
     public string LastName { get; }
 
-    public static Result<FullName, string> Create(string firstName, string lastName)
+    public static Result<FullName, Error> Create(string firstName, string lastName)
     {
         if (string.IsNullOrWhiteSpace(firstName))
-            return "First name cannot empty";
+            return Errors.General.ValueIsRequired(nameof(FirstName));
 
         if (string.IsNullOrWhiteSpace(lastName))
-            return "Last name cannot empty";
+            return Errors.General.ValueIsRequired(nameof(LastName));
 
         var fullName = new FullName(firstName, lastName);
 
-        return Result.Success<FullName, string>(fullName);
+        return fullName;
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

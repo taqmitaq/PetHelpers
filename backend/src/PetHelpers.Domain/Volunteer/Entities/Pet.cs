@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
-using PetHelpers.Domain.Shared.ValueObjects;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
 namespace PetHelpers.Domain.Volunteer.Entities;
@@ -12,6 +12,7 @@ public sealed class Pet : Entity<PetId>
     public Volunteer Volunteer { get; private set; }
 
     private Pet()
+        : base(PetId.NewId())
     {
     }
 

@@ -8,9 +8,13 @@ public sealed class SpeciesId : ComparableValueObject
 
     public Guid Value { get; }
 
-    public static implicit operator Guid(SpeciesId value) => value.Value;
+    public static implicit operator Guid(SpeciesId value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        return value.Value;
+    }
 
-    public static SpeciesId NewSpeciesId() => new(Guid.NewGuid());
+    public static SpeciesId NewId() => new(Guid.NewGuid());
 
     public static SpeciesId Empty() => new(Guid.Empty);
 

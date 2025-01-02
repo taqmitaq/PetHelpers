@@ -1,31 +1,19 @@
 ﻿using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
 public class Requisite : ValueObject
 {
-    private Requisite(string title, string description)
+    public Requisite(Title title, Description description)
     {
         Title = title;
         Description = description;
     }
 
-    public string Title { get; }
+    public Title Title { get; }
 
-    public string Description { get; }
-
-    public static Result<Requisite, string> Create(string title, string description)
-    {
-        if (string.IsNullOrWhiteSpace(title))
-            return "Title cannot be empty.";
-
-        if (string.IsNullOrWhiteSpace(description))
-            return "Description cannot be empty.";
-
-        var requisite = new Requisite(title, description);
-
-        return Result.Success<Requisite, string>(requisite);
-    }
+    public Description Description { get; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {

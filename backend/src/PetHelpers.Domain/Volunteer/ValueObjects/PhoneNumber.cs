@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
+using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
@@ -9,14 +10,14 @@ public class PhoneNumber : ValueObject
 
     public string Number { get; }
 
-    public static Result<PhoneNumber, string> Create(string number)
+    public static Result<PhoneNumber, Error> Create(string number)
     {
         if (!Regex.Match(number, @"^(\+[0-9]{9})$").Success)
-            return "Invalid phone number";
+            return Errors.General.ValueIsInvalid(nameof(PhoneNumber));
 
         var phoneNumber = new PhoneNumber(number);
 
-        return Result.Success<PhoneNumber, string>(phoneNumber);
+        return phoneNumber;
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

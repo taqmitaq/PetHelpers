@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using PetHelpers.Domain.Shared.ValueObjects;
+using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
@@ -22,7 +22,7 @@ public class Color : ValueObject
 
     public string Value { get; }
 
-    public static Result<Color, string> Create(string value)
+    public static Result<Color, Error> Create(string value)
     {
         value = value.Trim();
 
@@ -30,10 +30,10 @@ public class Color : ValueObject
         {
             var color = new Color(value);
 
-            return Result.Success<Color, string>(color);
+            return color;
         }
 
-        return "Color value is invalid";
+        return Errors.General.ValueIsInvalid(nameof(Color));
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
