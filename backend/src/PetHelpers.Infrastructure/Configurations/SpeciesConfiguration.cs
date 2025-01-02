@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
-using PetHelpers.Domain.Species;
+using PetHelpers.Domain.Species.Entities;
 
 namespace PetHelpers.Infrastructure.Configurations;
 
@@ -19,9 +19,13 @@ public class SpeciesConfiguration : IEntityTypeConfiguration<Species>
                 id => id.Value,
                 value => SpeciesId.Create(value));
 
-        builder.Property(s => s.Title)
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
-            .IsRequired();
+        builder.ComplexProperty(s => s.Title, pb =>
+        {
+            pb.IsRequired();
+            pb.Property(t => t.Text)
+                .HasColumnName("title")
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+        });
 
         builder.HasMany(s => s.Breeds)
             .WithOne(b => b.Species)

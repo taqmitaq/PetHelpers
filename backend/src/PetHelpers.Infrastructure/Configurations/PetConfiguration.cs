@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
-using PetHelpers.Domain.Volunteer;
+using PetHelpers.Domain.Volunteer.Entities;
 using PetHelpers.Infrastructure.Extensions;
 
 namespace PetHelpers.Infrastructure.Configurations;
@@ -20,25 +20,6 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 id => id.Value,
                 value => PetId.Create(value));
 
-        builder.Property(p => p.Name)
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
-            .IsRequired();
-
-        builder.Property(p => p.Description)
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
-            .IsRequired();
-
-        builder.Property(p => p.Color)
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
-            .IsRequired();
-
-        builder.Property(p => p.HealthInfo)
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
-            .IsRequired();
-
-        builder.Property(p => p.Location)
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
-            .IsRequired();
 
         builder.Property(p => p.Weight)
             .IsRequired();
@@ -52,7 +33,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(p => p.IsVaccinated)
             .IsRequired();
 
-        builder.Property(p => p.Birthdate)
+        builder.Property(p => p.BirthDate)
             .IsRequired();
 
         builder.Property(p => p.CreationDate)
@@ -60,14 +41,46 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired();
 
         builder.Property(p => p.Requisites)
-                    .JsonValueObjectCollectionConversion();
+            .JsonValueObjectCollectionConversion()
+            .HasColumnType("jsonb");
+
+        builder.ComplexProperty(p => p.PetName, b =>
+        {
+            b.IsRequired();
+            b.Property(pn => pn.Value)
+                .HasColumnName("name")
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+        });
+
+        builder.ComplexProperty(p => p.Description, b =>
+        {
+            b.IsRequired();
+            b.Property(p => p.Text)
+                .HasColumnName("description")
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+        });
+
+        builder.ComplexProperty(p => p.Color, b =>
+        {
+            b.IsRequired();
+            b.Property(c => c.Value)
+                .HasColumnName("color");
+        });
+
+        builder.ComplexProperty(p => p.HealthInfo, b =>
+        {
+            b.IsRequired();
+            b.Property(c => c.Info)
+                .HasColumnName("health_info")
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+        });
 
         builder.ComplexProperty(p => p.SpeciesAndBreed, b =>
         {
             b.IsRequired();
-            b.Property(p => p.SpeciesId)
+            b.Property(sb => sb.SpeciesId)
                 .HasColumnName("species_id");
-            b.Property(p => p.BreedId)
+            b.Property(sb => sb.BreedId)
                 .HasColumnName("breed_id");
         });
 
@@ -75,15 +88,28 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         {
             b.IsRequired();
             b.Property(p => p.Number)
-                .HasColumnName("owners_phone_number")
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                .HasColumnName("owners_phone_number");
         });
 
         builder.ComplexProperty(p => p.HelpStatus, b =>
         {
             b.IsRequired();
-            b.Property(p => p.Value)
+            b.Property(s => s.Value)
                 .HasColumnName("help_status");
+        });
+
+        builder.ComplexProperty(p => p.Location, b =>
+        {
+            b.IsRequired();
+            b.Property(l => l.City)
+                .HasColumnName("city")
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+            b.Property(l => l.Region)
+                .HasColumnName("region")
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+            b.Property(l => l.PostalCode)
+                .HasColumnName("postal_code")
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
         });
     }
 }
