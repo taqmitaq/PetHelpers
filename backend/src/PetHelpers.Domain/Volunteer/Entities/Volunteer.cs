@@ -38,11 +38,8 @@ public sealed class Volunteer : Entity<VolunteerId>
 
     public IReadOnlyList<Pet> OwnedPets => _ownedPets;
 
-    public static Result<Volunteer, string> Create(
+    public static Result<Volunteer, Error> Create(
         int yearsOfExperience,
-        int petsFoundHome,
-        int petsLookingForHome,
-        int petsInTreatment,
         Description description,
         Email email,
         FullName fullName,
@@ -51,16 +48,27 @@ public sealed class Volunteer : Entity<VolunteerId>
         var volunteer = new Volunteer
         {
             YearsOfExperience = yearsOfExperience,
-            PetsFoundHome = petsFoundHome,
-            PetsLookingForHome = petsLookingForHome,
-            PetsInTreatment = petsInTreatment,
             Description = description,
             Email = email,
             FullName = fullName,
             PhoneNumber = phoneNumber,
         };
 
-        return Result.Success<Volunteer, string>(volunteer);
+        return volunteer;
+    }
+
+    public UnitResult<Error> AddSocialMedia(SocialMedia socialMedia)
+    {
+        _socialMedias.Add(socialMedia);
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> AddRequisite(Requisite requisite)
+    {
+        _requisites.Add(requisite);
+
+        return UnitResult.Success<Error>();
     }
 
     public UnitResult<Error> AddPet(Pet pet)

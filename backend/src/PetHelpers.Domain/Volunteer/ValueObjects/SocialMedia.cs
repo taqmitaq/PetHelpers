@@ -5,7 +5,7 @@ namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
 public class SocialMedia : ValueObject
 {
-    private SocialMedia(Title title, string link)
+    public SocialMedia(Title title, Link link)
     {
         Title = title;
         Link = link;
@@ -13,17 +13,7 @@ public class SocialMedia : ValueObject
 
     public Title Title { get; }
 
-    public string Link { get; }
-
-    public static Result<SocialMedia, Error> Create(Title title, string link)
-    {
-        if (string.IsNullOrWhiteSpace(link))
-            return Errors.General.ValueIsRequired(nameof(Link));
-
-        var socialMedia = new SocialMedia(title, link);
-
-        return socialMedia;
-    }
+    public Link Link { get; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {

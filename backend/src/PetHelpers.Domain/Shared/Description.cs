@@ -8,6 +8,10 @@ public class Description : ComparableValueObject
 
     public string Text { get; }
 
+    public static implicit operator string(Description description) => description.Text;
+
+    public static implicit operator Description(string value) => Create(value).Value;
+
     public static Result<Description, Error> Create(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
