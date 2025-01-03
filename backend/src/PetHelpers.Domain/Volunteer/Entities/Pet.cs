@@ -46,7 +46,7 @@ public sealed class Pet : Entity<PetId>
 
     public IReadOnlyList<Requisite> Requisites => _requisites;
 
-    public static Result<Pet, string> Create(
+    public static Result<Pet, Error> Create(
         double height,
         double weight,
         bool isCastrated,
@@ -79,6 +79,6 @@ public sealed class Pet : Entity<PetId>
             OwnersPhoneNumber = ownersPhoneNumber,
         };
 
-        return Result.Success<Pet, string>(pet);
+        return pet;
     }
 }

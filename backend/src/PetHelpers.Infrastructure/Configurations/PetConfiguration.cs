@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PetHelpers.Application.Volunteers.CreateVolunteer;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
 using PetHelpers.Domain.Volunteer.Entities;
+using PetHelpers.Domain.Volunteer.ValueObjects;
 using PetHelpers.Infrastructure.Extensions;
 
 namespace PetHelpers.Infrastructure.Configurations;
@@ -41,8 +45,20 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired();
 
         builder.Property(p => p.Requisites)
-            .JsonValueObjectCollectionConversion()
-            .HasColumnType("jsonb");
+            .HasConversion(
+                requisites => JsonSerializer.Serialize(
+                    requisites.Select(
+                        r => new RequisiteDto(r.Title.Text, r.Description.Text)),
+                    JsonSerializerOptions.Default),
+                json => JsonSerializer.Deserialize<List<RequisiteDto>>(json, JsonSerializerOptions.Default)!
+                    .Select(dto => new Requisite(Title.Create(dto.Title).Value, Description.Create(dto.Description).Value))
+                    .ToList(),
+                new ValueComparer<IReadOnlyList<Requisite>>(
+                    (c1, c2) => c1!.SequenceEqual(c2!),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
+                    c => c.ToList()))
+            .HasColumnType("jsonb")
+            .HasColumnName("requisites");
 
         builder.ComplexProperty(p => p.PetName, b =>
         {

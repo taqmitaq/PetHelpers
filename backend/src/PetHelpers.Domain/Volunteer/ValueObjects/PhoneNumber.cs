@@ -12,10 +12,12 @@ public class PhoneNumber : ValueObject
 
     public static Result<PhoneNumber, Error> Create(string number)
     {
-        if (!Regex.Match(number, @"^(\+[0-9]{9})$").Success)
+        string phone = Regex.Replace(number, @"\D", String.Empty);
+
+        if (!Regex.Match(phone, @"^([0-9]{11})$").Success)
             return Errors.General.ValueIsInvalid(nameof(PhoneNumber));
 
-        var phoneNumber = new PhoneNumber(number);
+        var phoneNumber = new PhoneNumber(phone);
 
         return phoneNumber;
     }
