@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Application.Species.CreateSpecies;
@@ -7,11 +8,14 @@ namespace PetHelpers.Application.Species.CreateSpecies;
 public class CreateSpeciesHandler
 {
     private readonly ISpeciesRepository _speciesRepository;
+    private readonly ILogger<CreateSpeciesHandler> _logger;
 
     public CreateSpeciesHandler(
-        ISpeciesRepository speciesRepository)
+        ISpeciesRepository speciesRepository,
+        ILogger<CreateSpeciesHandler> logger)
     {
         _speciesRepository = speciesRepository;
+        _logger = logger;
     }
 
     public async Task<Result<Guid, Error>> Handle(
@@ -27,6 +31,8 @@ public class CreateSpeciesHandler
         var speciesToCreate = new Domain.Species.Entities.Species(request.Title);
 
         await _speciesRepository.Add(speciesToCreate, cancellationToken);
+
+        _logger.LogInformation("Created Species {title}", title);
 
         return (Guid)speciesToCreate.Id;
     }
