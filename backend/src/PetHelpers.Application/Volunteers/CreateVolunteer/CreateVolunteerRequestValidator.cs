@@ -11,7 +11,7 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
     {
         RuleFor(c => c.YearsOfExperience)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("Years of experience must be greater or equal to 0");
+            .WithError(Errors.General.ValueIsInvalid("YearsOfExperience"));
 
         RuleFor(c => c.Description).MustBeValueObject(Description.Create);
 
@@ -22,12 +22,22 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
         RuleFor(c => new { c.FirstName, c.LastName })
             .MustBeValueObject(f => FullName.Create(f.FirstName, f.LastName));
 
-        RuleForEach(c => c.Requisites)
-            .Must(c => Title.Create(c.Title).IsSuccess)
-            .Must(c => Description.Create(c.Description).IsSuccess);
+        RuleFor(c => c.Requisites)
+            .ForEach(r =>
+            {
+                r.Must(dto => Title.Create(dto.Title).IsSuccess)
+                    .WithError(Errors.General.ValueIsInvalid("Title"));
+                r.Must(dto => Description.Create(dto.Description).IsSuccess)
+                    .WithError(Errors.General.ValueIsInvalid("Description"));
+            });
 
-        RuleForEach(c => c.SocialMedias)
-            .Must(c => Title.Create(c.Title).IsSuccess)
-            .Must(c => Link.Create(c.Link).IsSuccess);
+        RuleFor(c => c.SocialMedias)
+            .ForEach(r =>
+            {
+                r.Must(dto => Title.Create(dto.Title).IsSuccess)
+                    .WithError(Errors.General.ValueIsInvalid("Title"));
+                r.Must(dto => Link.Create(dto.Link).IsSuccess)
+                    .WithError(Errors.General.ValueIsInvalid("Link"));
+            });
     }
 }
