@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetHelpers.API.Extensions;
+using PetHelpers.API.Response;
 using PetHelpers.Application.Species.CreateSpecies;
 
 namespace PetHelpers.API.Controllers;
@@ -14,6 +15,9 @@ public class SpeciesController : ApplicationController
     {
         var result = await handler.Handle(request, cancellationToken);
 
-        return result.ToResponse();
+        if (result.IsFailure)
+            return result.Error.ToErrorResponse();
+
+        return Ok(Envelope.Success(result.Value));
     }
 }

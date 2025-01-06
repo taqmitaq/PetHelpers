@@ -17,32 +17,20 @@ public class CreateVolunteerHandler
     public async Task<Result<Guid, Error>> Handle(
         CreateVolunteerRequest request, CancellationToken cancellationToken)
     {
-        var descriptionResult = Description.Create(request.Description);
+        var description = Description.Create(request.Description).Value;
 
-        if (descriptionResult.IsFailure)
-            return descriptionResult.Error;
+        var email = Email.Create(request.Email).Value;
 
-        var emailResult = Email.Create(request.Email);
+        var fullName = FullName.Create(request.FirstName, request.LastName).Value;
 
-        if (emailResult.IsFailure)
-            return emailResult.Error;
-
-        var fullNameResult = FullName.Create(request.FirstName, request.LastName);
-
-        if (fullNameResult.IsFailure)
-            return fullNameResult.Error;
-
-        var phoneNumberResult = PhoneNumber.Create(request.PhoneNumber);
-
-        if (phoneNumberResult.IsFailure)
-            return phoneNumberResult.Error;
+        var phoneNumber = PhoneNumber.Create(request.PhoneNumber).Value;
 
         var volunteerResult = Volunteer.Create(
             request.YearsOfExperience,
-            descriptionResult.Value,
-            emailResult.Value,
-            fullNameResult.Value,
-            phoneNumberResult.Value);
+            description,
+            email,
+            fullName,
+            phoneNumber);
 
         if (volunteerResult.IsFailure)
             return volunteerResult.Error;
@@ -51,34 +39,20 @@ public class CreateVolunteerHandler
 
         foreach (var sm in request.SocialMedias)
         {
-            var titleResult = Title.Create(sm.Title);
+            var title = Title.Create(sm.Title).Value;
 
-            if (titleResult.IsFailure)
-                return titleResult.Error;
+            var link = Link.Create(sm.Link).Value;
 
-            var linkResult = Link.Create(sm.Link);
-
-            if (linkResult.IsFailure)
-                return linkResult.Error;
-
-            volunteer.AddSocialMedia(new SocialMedia(titleResult.Value, linkResult.Value));
+            volunteer.AddSocialMedia(new SocialMedia(title, link));
         }
 
         foreach (var r in request.Requisites)
         {
-            var titleResult = Title.Create(r.Title);
+            var title = Title.Create(r.Title).Value;
 
-            if (titleResult.IsFailure)
-                return titleResult.Error;
+            var requisiteDescription = Description.Create(r.Description).Value;
 
-            var requisiteDescriptionResult = Description.Create(r.Description);
-
-            if (requisiteDescriptionResult.IsFailure)
-                return requisiteDescriptionResult.Error;
-
-            var requisite = new Requisite(titleResult.Value, requisiteDescriptionResult.Value);
-
-            volunteer.AddRequisite(requisite);
+            volunteer.AddRequisite(new Requisite(title, requisiteDescription));
         }
 
         await _volunteerRepository.Add(volunteer, cancellationToken);

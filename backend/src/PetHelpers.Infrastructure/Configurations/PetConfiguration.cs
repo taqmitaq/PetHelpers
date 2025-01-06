@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHelpers.Application.Dtos;
-using PetHelpers.Application.Volunteers.CreateVolunteer;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
 using PetHelpers.Domain.Volunteer.Entities;
