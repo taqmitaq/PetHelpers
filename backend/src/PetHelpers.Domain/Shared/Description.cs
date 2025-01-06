@@ -14,7 +14,7 @@ public class Description : ComparableValueObject
 
     public static Result<Description, Error> Create(string text)
     {
-        if (string.IsNullOrWhiteSpace(text))
+        if (string.IsNullOrWhiteSpace(text) || text.Length > Constants.MAX_HIGH_TEXT_LENGTH)
             return Errors.General.ValueIsRequired(nameof(Description));
 
         var description = new Description(text);

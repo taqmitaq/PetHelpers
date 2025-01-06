@@ -8,7 +8,7 @@ public static class Errors
         {
             var label = name ?? "value";
 
-            return Error.Validation("value.is.invalid", $"{label} cannot be empty");
+            return Error.Validation("value.is.invalid", $"{label} is invalid");
         }
 
         public static Error NotFound(Guid? id = null)
@@ -20,9 +20,9 @@ public static class Errors
 
         public static Error ValueIsRequired(string? name = null)
         {
-            var label = name is null ? string.Empty : $" {name}";
+            var label = name is null ? " " : $" {name} ";
 
-            return Error.Validation("length.is.invalid", $"invalid{label} length");
+            return Error.Validation("length.is.invalid", $"invalid{label}length");
         }
     }
 

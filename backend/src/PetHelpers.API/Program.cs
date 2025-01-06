@@ -1,15 +1,13 @@
+using PetHelpers.API;
 using PetHelpers.Application;
 using PetHelpers.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services
     .AddInfrastructure()
-    .AddApplication();
+    .AddApplication()
+    .AddAPI();
 
 var app = builder.Build();
 

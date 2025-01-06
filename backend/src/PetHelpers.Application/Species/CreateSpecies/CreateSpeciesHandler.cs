@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Application.Species.CreateSpecies;
@@ -7,7 +8,8 @@ public class CreateSpeciesHandler
 {
     private readonly ISpeciesRepository _speciesRepository;
 
-    public CreateSpeciesHandler(ISpeciesRepository speciesRepository)
+    public CreateSpeciesHandler(
+        ISpeciesRepository speciesRepository)
     {
         _speciesRepository = speciesRepository;
     }
@@ -15,12 +17,9 @@ public class CreateSpeciesHandler
     public async Task<Result<Guid, Error>> Handle(
         CreateSpeciesRequest request, CancellationToken cancellationToken)
     {
-        var titleResult = Title.Create(request.Title);
+        var title = Title.Create(request.Title).Value;
 
-        if (titleResult.IsFailure)
-            return titleResult.Error;
-
-        var species = await _speciesRepository.GetByTitle(titleResult.Value, cancellationToken);
+        var species = await _speciesRepository.GetByTitle(title, cancellationToken);
 
         if (species.IsSuccess)
             return Errors.Species.AlreadyExists();

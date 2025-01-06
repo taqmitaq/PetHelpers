@@ -1,26 +1,23 @@
-﻿using PetHelpers.Domain.Shared;
+﻿namespace PetHelpers.API.Response;
 
-namespace PetHelpers.API.Response;
+public record ResponceError(string? ErrorCode, string? ErrorMessage, string? InvalidField);
 
 public record Envelope
 {
-    private Envelope(object? result, Error? error)
+    private Envelope(object? result, IEnumerable<ResponceError> errors)
     {
         Result = result;
-        ErrorCode = error?.Code;
-        ErrorMessage = error?.Message;
+        Errors = errors.ToList();
         TimeGenerated = DateTime.Now;
     }
 
-    public static Envelope Success(object? result = null) => new(result, null);
+    public static Envelope Success(object? result = null) => new(result, []);
 
-    public static Envelope Error(Error error) => new(null, error);
+    public static Envelope Error(IEnumerable<ResponceError> errors) => new(null, errors);
 
     public object? Result { get; }
 
-    public string? ErrorCode { get; }
-
-    public string? ErrorMessage { get; }
+    public List<ResponceError> Errors { get; }
 
     public DateTime TimeGenerated { get; }
 }
