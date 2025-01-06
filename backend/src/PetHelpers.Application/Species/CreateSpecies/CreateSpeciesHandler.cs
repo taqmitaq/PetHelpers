@@ -7,14 +7,11 @@ namespace PetHelpers.Application.Species.CreateSpecies;
 public class CreateSpeciesHandler
 {
     private readonly ISpeciesRepository _speciesRepository;
-    private readonly IValidator<CreateSpeciesRequest> _validator;
 
     public CreateSpeciesHandler(
-        ISpeciesRepository speciesRepository,
-        IValidator<CreateSpeciesRequest> validator)
+        ISpeciesRepository speciesRepository)
     {
         _speciesRepository = speciesRepository;
-        _validator = validator;
     }
 
     public async Task<Result<Guid, Error>> Handle(
