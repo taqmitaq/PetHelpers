@@ -18,10 +18,10 @@ public class FullName : ValueObject
     public static Result<FullName, Error> Create(string firstName, string lastName)
     {
         if (string.IsNullOrWhiteSpace(firstName))
-            return Errors.General.ValueIsRequired(nameof(FirstName));
+            return Errors.General.ValueIsRequired("FirstName");
 
         if (string.IsNullOrWhiteSpace(lastName))
-            return Errors.General.ValueIsRequired(nameof(LastName));
+            return Errors.General.ValueIsRequired("LastName");
 
         var fullName = new FullName(firstName, lastName);
 

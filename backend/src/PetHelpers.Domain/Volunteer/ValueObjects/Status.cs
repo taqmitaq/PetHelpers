@@ -26,7 +26,7 @@ public class Status : ValueObject
             return status;
         }
 
-        return Errors.General.ValueIsInvalid(nameof(Status));
+        return Errors.General.ValueIsInvalid("Status");
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

@@ -6,6 +6,8 @@ namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
 public class PhoneNumber : ValueObject
 {
+    private const string VALID_PHONE_PATTERN = @"^([0-9]{11})$";
+
     private PhoneNumber(string number) => Number = number;
 
     public string Number { get; }
@@ -14,8 +16,8 @@ public class PhoneNumber : ValueObject
     {
         string phone = Regex.Replace(number, @"\D", String.Empty);
 
-        if (!Regex.Match(phone, @"^([0-9]{11})$").Success)
-            return Errors.General.ValueIsInvalid(nameof(PhoneNumber));
+        if (Regex.Match(phone, VALID_PHONE_PATTERN).Success == false)
+            return Errors.General.ValueIsInvalid("PhoneNumber");
 
         var phoneNumber = new PhoneNumber(phone);
 

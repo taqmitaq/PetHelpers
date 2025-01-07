@@ -33,7 +33,7 @@ public class Color : ValueObject
             return color;
         }
 
-        return Errors.General.ValueIsInvalid(nameof(Color));
+        return Errors.General.ValueIsInvalid("Email");
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

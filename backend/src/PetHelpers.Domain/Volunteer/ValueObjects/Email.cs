@@ -33,8 +33,8 @@ public class Email : ValueObject
     {
         address = address.Trim();
 
-        if (!Regex.Match(address, VALID_EMAIL_PATTERN, RegexOptions.IgnoreCase).Success)
-            return Errors.General.ValueIsInvalid(nameof(Email));
+        if (Regex.Match(address, VALID_EMAIL_PATTERN, RegexOptions.IgnoreCase).Success == false)
+            return Errors.General.ValueIsInvalid("Email");
 
         var email = new Email(address);
 
