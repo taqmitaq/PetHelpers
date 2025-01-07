@@ -26,7 +26,7 @@ public class CreateVolunteerHandler
 
         var email = Email.Create(request.Email).Value;
 
-        var fullName = FullName.Create(request.FirstName, request.LastName).Value;
+        var fullName = FullName.Create(request.FullName.FirstName, request.FullName.LastName).Value;
 
         var phoneNumber = PhoneNumber.Create(request.PhoneNumber).Value;
 
