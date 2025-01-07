@@ -2,7 +2,7 @@
 
 public class Error
 {
-    public const string SEPARATOR = " | ";
+    public const string SEPARATOR = "|";
 
     private Error(string code, string message, ErrorType type)
     {
@@ -35,7 +35,7 @@ public class Error
     {
         var parts = serialized.Split(SEPARATOR);
 
-        if (parts.Length < 3)
+        if (parts.Length != 3)
         {
             throw new FormatException("Invalid serialization format");
         }
