@@ -12,7 +12,7 @@ public class PetName : ValueObject
     public static Result<PetName, Error> Create(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return Errors.General.ValueIsRequired(nameof(PetName));
+            return Errors.General.ValueIsRequired("PetName");
 
         var petName = new PetName(name);
 

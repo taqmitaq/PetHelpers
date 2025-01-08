@@ -14,8 +14,8 @@ public class Link : ComparableValueObject
 
     public static Result<Link, Error> Create(string text)
     {
-        if (!Uri.IsWellFormedUriString(text, UriKind.Absolute))
-            return Errors.General.ValueIsInvalid(nameof(Link));
+        if (Uri.IsWellFormedUriString(text, UriKind.Absolute) == false)
+            return Errors.General.ValueIsInvalid("Link");
 
         var link = new Link(text);
 

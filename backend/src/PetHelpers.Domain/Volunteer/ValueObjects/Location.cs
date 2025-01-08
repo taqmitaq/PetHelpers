@@ -21,13 +21,13 @@ public class Location : ValueObject
     public static Result<Location, Error> Create(string city, string region, string postalCode)
     {
         if (string.IsNullOrWhiteSpace(city))
-            return Errors.General.ValueIsRequired(nameof(City));
+            return Errors.General.ValueIsRequired("City");
 
         if (string.IsNullOrWhiteSpace(region))
-            return Errors.General.ValueIsRequired(nameof(Region));
+            return Errors.General.ValueIsRequired("Region");
 
         if (string.IsNullOrWhiteSpace(postalCode))
-            return Errors.General.ValueIsRequired(nameof(PostalCode));
+            return Errors.General.ValueIsRequired("PostalCode");
 
         var location = new Location(city, region, postalCode);
 

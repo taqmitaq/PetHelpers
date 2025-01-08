@@ -12,7 +12,7 @@ public class HealthInfo : ValueObject
     public static Result<HealthInfo, Error> Create(string info)
     {
         if (string.IsNullOrWhiteSpace(info))
-            return Errors.General.ValueIsRequired(nameof(HealthInfo));
+            return Errors.General.ValueIsRequired("HealthInfo");
 
         var healthInfo = new HealthInfo(info);
 
