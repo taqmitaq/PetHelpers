@@ -1,6 +1,6 @@
 ﻿using PetHelpers.Application.Dtos;
 
-namespace PetHelpers.Application.Volunteers.CreateVolunteer;
+namespace PetHelpers.Application.Volunteers.Create;
 
 public record CreateVolunteerRequest(
     int YearsOfExperience,

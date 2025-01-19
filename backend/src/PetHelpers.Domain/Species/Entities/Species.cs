@@ -19,4 +19,11 @@ public sealed class Species : Entity<SpeciesId>
     public Title Title { get; private set; }
 
     public IReadOnlyList<Breed> Breeds => _breeds;
+
+    public UnitResult<Error> UpdateTitle(Title title)
+    {
+        Title = title;
+
+        return UnitResult.Success<Error>();
+    }
 }

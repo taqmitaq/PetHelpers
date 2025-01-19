@@ -1,20 +1,19 @@
 ﻿using CSharpFunctionalExtensions;
-using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetHelpers.Domain.Shared;
 
-namespace PetHelpers.Application.Species.CreateSpecies;
+namespace PetHelpers.Application.Species.Create;
 
 public class CreateSpeciesHandler
 {
-    private readonly ISpeciesRepository _speciesRepository;
+    private readonly ISpeciesRepository _repository;
     private readonly ILogger<CreateSpeciesHandler> _logger;
 
     public CreateSpeciesHandler(
-        ISpeciesRepository speciesRepository,
+        ISpeciesRepository repository,
         ILogger<CreateSpeciesHandler> logger)
     {
-        _speciesRepository = speciesRepository;
+        _repository = repository;
         _logger = logger;
     }
 
@@ -23,14 +22,14 @@ public class CreateSpeciesHandler
     {
         var title = Title.Create(request.Title).Value;
 
-        var species = await _speciesRepository.GetByTitle(title, cancellationToken);
+        var species = await _repository.GetByTitle(title, cancellationToken);
 
         if (species.IsSuccess)
             return Errors.Species.AlreadyExists();
 
         var speciesToCreate = new Domain.Species.Entities.Species(request.Title);
 
-        await _speciesRepository.Add(speciesToCreate, cancellationToken);
+        await _repository.Add(speciesToCreate, cancellationToken);
 
         _logger.LogInformation("Created Species {title}", title);
 

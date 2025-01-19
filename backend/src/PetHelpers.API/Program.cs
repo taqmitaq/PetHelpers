@@ -18,8 +18,6 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
     .CreateLogger();
 
-builder.Services.AddSerilog();
-
 builder.Services
     .AddInfrastructure()
     .AddApplication()

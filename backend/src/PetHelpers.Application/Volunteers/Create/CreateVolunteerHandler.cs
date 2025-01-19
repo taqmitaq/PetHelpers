@@ -4,7 +4,7 @@ using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.Entities;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.CreateVolunteer;
+namespace PetHelpers.Application.Volunteers.Create;
 
 public class CreateVolunteerHandler
 {
@@ -62,7 +62,7 @@ public class CreateVolunteerHandler
 
         await _volunteerRepository.Add(volunteer, cancellationToken);
 
-        _logger.LogInformation("Created volunteer with ID: {volunteer.Id}", volunteer.Id);
+        _logger.LogInformation("Created volunteer with Id: {volunteer.Id}", volunteer.Id);
 
         return (Guid)volunteer.Id;
     }

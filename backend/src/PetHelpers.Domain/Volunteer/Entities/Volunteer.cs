@@ -57,6 +57,22 @@ public sealed class Volunteer : Entity<VolunteerId>
         return volunteer;
     }
 
+    public UnitResult<Error> UpdateMainInfo(
+        int yearsOfExperience,
+        Description description,
+        PhoneNumber phoneNumber,
+        Email email,
+        FullName fullName)
+    {
+        YearsOfExperience = yearsOfExperience;
+        Description = description;
+        PhoneNumber = phoneNumber;
+        Email = email;
+        FullName = fullName;
+
+        return UnitResult.Success<Error>();
+    }
+
     public UnitResult<Error> AddSocialMedia(SocialMedia socialMedia)
     {
         _socialMedias.Add(socialMedia);
