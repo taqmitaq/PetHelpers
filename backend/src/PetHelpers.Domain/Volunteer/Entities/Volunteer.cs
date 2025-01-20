@@ -73,6 +73,22 @@ public sealed class Volunteer : Entity<VolunteerId>
         return UnitResult.Success<Error>();
     }
 
+    public UnitResult<Error> UpdateRequisites(IEnumerable<Requisite> requisites)
+    {
+        _requisites.Clear();
+        _requisites.AddRange(requisites);
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateSocialMedias(IEnumerable<SocialMedia> socialMedias)
+    {
+        _socialMedias.Clear();
+        _socialMedias.AddRange(socialMedias);
+
+        return UnitResult.Success<Error>();
+    }
+
     public UnitResult<Error> AddSocialMedia(SocialMedia socialMedia)
     {
         _socialMedias.Add(socialMedia);

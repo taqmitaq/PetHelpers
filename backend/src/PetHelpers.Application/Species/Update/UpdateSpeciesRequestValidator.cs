@@ -9,7 +9,7 @@ public class UpdateSpeciesRequestValidator : AbstractValidator<UpdateSpeciesRequ
 {
     public UpdateSpeciesRequestValidator()
     {
-        RuleFor(r => r.SpeciesId).NotEmpty().WithError(Errors.General.ValueIsRequired());
+        RuleFor(u => u.SpeciesId).NotEmpty().WithError(Errors.General.ValueIsRequired());
     }
 }
 
@@ -17,6 +17,6 @@ public class UpdateSpeciesDtoValidator : AbstractValidator<UpdateSpeciesDto>
 {
     public UpdateSpeciesDtoValidator()
     {
-        RuleFor(d => d.Title).MustBeValueObject(Title.Create);
+        RuleFor(u => u.Title).MustBeValueObject(Title.Create);
     }
 }

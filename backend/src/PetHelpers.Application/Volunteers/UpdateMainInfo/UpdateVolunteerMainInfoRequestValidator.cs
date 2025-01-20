@@ -18,17 +18,17 @@ public class UpdateVolunteerMainInfoDtoValidator : AbstractValidator<UpdateVolun
 {
     public UpdateVolunteerMainInfoDtoValidator()
     {
-        RuleFor(d => d.YearsOfExperience)
+        RuleFor(u => u.YearsOfExperience)
             .GreaterThanOrEqualTo(0)
             .WithError(Errors.General.ValueIsInvalid("YearsOfExperience"));
 
-        RuleFor(d => d.Description).MustBeValueObject(Description.Create);
+        RuleFor(u => u.Description).MustBeValueObject(Description.Create);
 
-        RuleFor(d => d.Email).MustBeValueObject(Email.Create);
+        RuleFor(u => u.Email).MustBeValueObject(Email.Create);
 
-        RuleFor(d => d.PhoneNumber).MustBeValueObject(PhoneNumber.Create);
+        RuleFor(u => u.PhoneNumber).MustBeValueObject(PhoneNumber.Create);
 
-        RuleFor(d => d.FullName)
+        RuleFor(u => u.FullName)
             .MustBeValueObject(dto => FullName.Create(dto.FirstName, dto.LastName));
     }
 }
