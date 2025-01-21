@@ -14,6 +14,11 @@ public sealed class PetId : ComparableValueObject
         return value.Value;
     }
 
+    public static implicit operator PetId(Guid id)
+    {
+        return Create(id);
+    }
+
     public static PetId NewId() => new(Guid.NewGuid());
 
     public static PetId Empty() => new(Guid.Empty);

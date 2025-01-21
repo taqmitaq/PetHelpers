@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using PetHelpers.API.Response;
 using PetHelpers.Domain.Shared;
 
@@ -22,5 +23,26 @@ public static class ResponseExtensions
         var envelope = Envelope.Error([responseError]);
 
         return new ObjectResult(envelope) { StatusCode = statusCode, };
+    }
+
+    public static ActionResult ToValidationErrorResponse(this ValidationResult result)
+    {
+        if (result.IsValid)
+            throw new InvalidOperationException("Validation result can not be valid.");
+
+        var validationErrors = result.Errors;
+
+        var responseErrors =
+            from validationError in validationErrors
+            let errorMessage = validationError.ErrorMessage
+            let error = Error.Deserialize(errorMessage)
+            select new ResponseError(error.Code, error.Message, validationError.PropertyName);
+
+        var envelope = Envelope.Error(responseErrors);
+
+        return new ObjectResult(envelope)
+        {
+            StatusCode = StatusCodes.Status400BadRequest,
+        };
     }
 }

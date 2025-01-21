@@ -24,7 +24,7 @@ public class SpeciesConfiguration : IEntityTypeConfiguration<Species>
             pb.IsRequired();
             pb.Property(t => t.Text)
                 .HasColumnName("title")
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH);
         });
 
         builder.HasMany(s => s.Breeds)

@@ -14,7 +14,7 @@ public class Title : ComparableValueObject
 
     public static Result<Title, Error> Create(string text)
     {
-        if (string.IsNullOrWhiteSpace(text) || text.Length > Constants.MAX_LOW_TEXT_LENGTH)
+        if (string.IsNullOrWhiteSpace(text) || text.Length > Constants.MAX_SHORT_TEXT_LENGTH)
             return Errors.General.ValueIsInvalid("Title");
 
         return new Title(text);

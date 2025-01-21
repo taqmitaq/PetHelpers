@@ -25,7 +25,17 @@ public class SpeciesRepository : ISpeciesRepository
         return species.Id;
     }
 
-    public async Task<Result<Species, Error>> GetById(SpeciesId speciesId, CancellationToken cancellationToken)
+    public async Task<Guid> Save(Species species, CancellationToken cancellationToken)
+    {
+        _dbContext.Species.Attach(species);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return species.Id;
+    }
+
+    public async Task<Result<Species, Error>> GetById(
+        SpeciesId speciesId, CancellationToken cancellationToken)
     {
         var species = await _dbContext.Species
             .Include(s => s.Breeds)
@@ -37,7 +47,8 @@ public class SpeciesRepository : ISpeciesRepository
         return species;
     }
 
-    public async Task<Result<Species, Error>> GetByTitle(Title title, CancellationToken cancellationToken)
+    public async Task<Result<Species, Error>> GetByTitle(
+        Title title, CancellationToken cancellationToken)
     {
         var species = await _dbContext.Species
             .Include(s => s.Breeds)

@@ -65,7 +65,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             b.IsRequired();
             b.Property(pn => pn.Value)
                 .HasColumnName("name")
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH);
         });
 
         builder.ComplexProperty(p => p.Description, b =>
@@ -73,7 +73,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             b.IsRequired();
             b.Property(p => p.Text)
                 .HasColumnName("description")
-                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_LONG_TEXT_LENGTH);
         });
 
         builder.ComplexProperty(p => p.Color, b =>
@@ -88,7 +88,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             b.IsRequired();
             b.Property(c => c.Info)
                 .HasColumnName("health_info")
-                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_LONG_TEXT_LENGTH);
         });
 
         builder.ComplexProperty(p => p.SpeciesAndBreed, b =>
@@ -119,13 +119,13 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             b.IsRequired();
             b.Property(l => l.City)
                 .HasColumnName("city")
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH);
             b.Property(l => l.Region)
                 .HasColumnName("region")
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH);
             b.Property(l => l.PostalCode)
                 .HasColumnName("postal_code")
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH);
         });
     }
 }

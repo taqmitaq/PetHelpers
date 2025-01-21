@@ -14,6 +14,11 @@ public sealed class SpeciesId : ComparableValueObject
         return value.Value;
     }
 
+    public static implicit operator SpeciesId(Guid id)
+    {
+        return Create(id);
+    }
+
     public static SpeciesId NewId() => new(Guid.NewGuid());
 
     public static SpeciesId Empty() => new(Guid.Empty);

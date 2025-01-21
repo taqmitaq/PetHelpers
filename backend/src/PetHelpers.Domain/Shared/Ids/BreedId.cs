@@ -14,6 +14,11 @@ public sealed class BreedId : ComparableValueObject
         return value.Value;
     }
 
+    public static implicit operator BreedId(Guid id)
+    {
+        return Create(id);
+    }
+
     public static BreedId NewId() => new(Guid.NewGuid());
 
     public static BreedId Empty() => new(Guid.Empty);

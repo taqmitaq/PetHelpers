@@ -1,4 +1,8 @@
-﻿using PetHelpers.Application.Volunteers;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using PetHelpers.Application.Volunteers;
+using PetHelpers.Domain.Shared;
+using PetHelpers.Domain.Shared.Ids;
 using PetHelpers.Domain.Volunteer.Entities;
 
 namespace PetHelpers.Infrastructure.Repositories;
@@ -19,5 +23,26 @@ public class VolunteerRepository : IVolunteerRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return volunteer.Id;
+    }
+
+    public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken)
+    {
+        _dbContext.Attach(volunteer);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return volunteer.Id;
+    }
+
+    public async Task<Result<Volunteer, Error>> GetById(VolunteerId volunteerId, CancellationToken cancellationToken)
+    {
+        var volunteer = await _dbContext.Volunteers
+            .Include(v => v.OwnedPets)
+            .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
+
+        if (volunteer is null)
+            return Errors.General.NotFound(volunteerId);
+
+        return volunteer;
     }
 }

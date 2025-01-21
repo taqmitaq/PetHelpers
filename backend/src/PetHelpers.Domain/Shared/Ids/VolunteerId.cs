@@ -14,6 +14,11 @@ public sealed class VolunteerId : ComparableValueObject
         return value.Value;
     }
 
+    public static implicit operator VolunteerId(Guid id)
+    {
+        return Create(id);
+    }
+
     public static VolunteerId NewId() => new(Guid.NewGuid());
 
     public static VolunteerId Empty() => new(Guid.Empty);
