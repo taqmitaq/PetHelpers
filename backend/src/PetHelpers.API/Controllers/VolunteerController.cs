@@ -27,7 +27,7 @@ public class VolunteerController : ApplicationController
     }
 
     [HttpPut("{id:guid}/main-info")]
-    public async Task<ActionResult<Guid>> Update(
+    public async Task<ActionResult<Guid>> UpdateMainInfo(
         [FromRoute] Guid id,
         [FromBody] UpdateVolunteerMainInfoDto dto,
         [FromServices] UpdateVolunteerMainInfoHandler handler,
@@ -52,7 +52,7 @@ public class VolunteerController : ApplicationController
     }
 
     [HttpPut("{id:guid}/requisites")]
-    public async Task<ActionResult<Guid>> Update(
+    public async Task<ActionResult<Guid>> UpdateRequisites(
         [FromRoute] Guid id,
         [FromBody] UpdateVolunteerRequisitesDto dto,
         [FromServices] UpdateVolunteerRequisitesHandler handler,
@@ -77,7 +77,7 @@ public class VolunteerController : ApplicationController
     }
 
     [HttpPut("{id:guid}/social-medias")]
-    public async Task<ActionResult<Guid>> Update(
+    public async Task<ActionResult<Guid>> UpdateSocialMedias(
         [FromRoute] Guid id,
         [FromBody] UpdateVolunteerSocialMediasDto dto,
         [FromServices] UpdateVolunteerSocialMediasHandler handler,
