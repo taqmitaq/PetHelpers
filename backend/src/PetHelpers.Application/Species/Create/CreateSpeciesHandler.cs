@@ -29,10 +29,10 @@ public class CreateSpeciesHandler
 
         var speciesToCreate = new Domain.Species.Entities.Species(request.Title);
 
-        await _repository.Add(speciesToCreate, cancellationToken);
+        var result = await _repository.Add(speciesToCreate, cancellationToken);
 
-        _logger.LogInformation("Created Species {title}", title);
+        _logger.LogInformation("Created Species {title} with id {speciesId}", title.Text, result);
 
-        return (Guid)speciesToCreate.Id;
+        return result;
     }
 }

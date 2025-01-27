@@ -10,6 +10,8 @@ public interface ISpeciesRepository
 
     Task<Guid> Save(Domain.Species.Entities.Species species, CancellationToken cancellationToken);
 
+    Task<Guid> Delete(Domain.Species.Entities.Species species, CancellationToken cancellationToken);
+
     Task<Result<Domain.Species.Entities.Species, Error>> GetById(
         SpeciesId speciesId, CancellationToken cancellationToken);
 

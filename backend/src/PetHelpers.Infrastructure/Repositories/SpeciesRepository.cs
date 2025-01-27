@@ -34,6 +34,15 @@ public class SpeciesRepository : ISpeciesRepository
         return species.Id;
     }
 
+    public async Task<Guid> Delete(Species species, CancellationToken cancellationToken)
+    {
+        _dbContext.Species.Remove(species);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return species.Id;
+    }
+
     public async Task<Result<Species, Error>> GetById(
         SpeciesId speciesId, CancellationToken cancellationToken)
     {
