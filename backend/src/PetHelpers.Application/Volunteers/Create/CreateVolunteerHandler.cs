@@ -60,10 +60,10 @@ public class CreateVolunteerHandler
             volunteer.AddRequisite(new Requisite(title, requisiteDescription));
         }
 
-        await _volunteerRepository.Add(volunteer, cancellationToken);
+        var result = await _volunteerRepository.Add(volunteer, cancellationToken);
 
-        _logger.LogInformation("Created volunteer with Id: {volunteer.Id}", volunteer.Id);
+        _logger.LogInformation("Created volunteer with Id: {volunteerId}", result);
 
-        return (Guid)volunteer.Id;
+        return result;
     }
 }

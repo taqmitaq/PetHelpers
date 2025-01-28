@@ -8,6 +8,8 @@ public sealed class Species : Entity<SpeciesId>
 {
     private readonly List<Breed> _breeds = [];
 
+    private bool _isDeleted = false;
+
     private Species()
         : base(SpeciesId.NewId())
     {
@@ -19,6 +21,10 @@ public sealed class Species : Entity<SpeciesId>
     public Title Title { get; private set; }
 
     public IReadOnlyList<Breed> Breeds => _breeds;
+
+    public void Delete() => _isDeleted = true;
+
+    public void Restore() => _isDeleted = false;
 
     public UnitResult<Error> UpdateTitle(Title title)
     {

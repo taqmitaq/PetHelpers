@@ -19,6 +19,10 @@ public class BreedConfiguration : IEntityTypeConfiguration<Breed>
                 id => id.Value,
                 value => BreedId.Create(value));
 
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_deleted");
+
         builder.ComplexProperty(b => b.Title, pb =>
         {
             pb.IsRequired();

@@ -11,6 +11,8 @@ public sealed class Volunteer : Entity<VolunteerId>
     private readonly List<Requisite> _requisites = [];
     private readonly List<Pet> _ownedPets = [];
 
+    private bool _isDeleted = false;
+
     private Volunteer()
         : base(VolunteerId.NewId())
     {
@@ -37,6 +39,10 @@ public sealed class Volunteer : Entity<VolunteerId>
     public IReadOnlyList<Requisite> Requisites => _requisites;
 
     public IReadOnlyList<Pet> OwnedPets => _ownedPets;
+
+    public void Delete() => _isDeleted = true;
+
+    public void Restore() => _isDeleted = false;
 
     public static Result<Volunteer, Error> Create(
         int yearsOfExperience,

@@ -29,6 +29,10 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_deleted");
+
         builder.Property(v => v.YearsOfExperience)
             .IsRequired();
 
