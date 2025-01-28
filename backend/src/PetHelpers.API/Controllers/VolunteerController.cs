@@ -4,6 +4,7 @@ using PetHelpers.API.Extensions;
 using PetHelpers.API.Response;
 using PetHelpers.Application.Dtos;
 using PetHelpers.Application.Volunteers.Create;
+using PetHelpers.Application.Volunteers.Delete;
 using PetHelpers.Application.Volunteers.UpdateMainInfo;
 using PetHelpers.Application.Volunteers.UpdateRequisites;
 using PetHelpers.Application.Volunteers.UpdateSocialMedias;
@@ -85,6 +86,54 @@ public class VolunteerController : ApplicationController
         CancellationToken cancellationToken)
     {
         var request = new UpdateVolunteerSocialMediasRequest(id, dto);
+
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (validationResult.IsValid == false)
+        {
+            return validationResult.ToValidationErrorResponse();
+        }
+
+        var result = await handler.Handle(request, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToErrorResponse();
+
+        return Ok(Envelope.Success(result.Value));
+    }
+
+    [HttpDelete("{id:guid}/hard")]
+    public async Task<ActionResult<Guid>> HardDelete(
+        [FromRoute] Guid id,
+        [FromServices] HardDeleteVolunteerHandler handler,
+        [FromServices] IValidator<DeleteVolunteerRequest> validator,
+        CancellationToken cancellationToken)
+    {
+        var request = new DeleteVolunteerRequest(id);
+
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (validationResult.IsValid == false)
+        {
+            return validationResult.ToValidationErrorResponse();
+        }
+
+        var result = await handler.Handle(request, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToErrorResponse();
+
+        return Ok(Envelope.Success(result.Value));
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult<Guid>> SoftDelete(
+        [FromRoute] Guid id,
+        [FromServices] SoftDeleteVolunteerHandler handler,
+        [FromServices] IValidator<DeleteVolunteerRequest> validator,
+        CancellationToken cancellationToken)
+    {
+        var request = new DeleteVolunteerRequest(id);
 
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 

@@ -9,6 +9,8 @@ public sealed class Pet : Entity<PetId>
 {
     private readonly List<Requisite> _requisites = [];
 
+    private bool _isDeleted = false;
+
     public Volunteer Volunteer { get; private set; }
 
     private Pet()
@@ -81,4 +83,8 @@ public sealed class Pet : Entity<PetId>
 
         return pet;
     }
+
+    public void Delete() => _isDeleted = true;
+
+    public void Restore() => _isDeleted = false;
 }

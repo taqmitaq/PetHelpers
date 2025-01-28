@@ -4,14 +4,14 @@ using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Application.Species.Delete;
 
-public class DeleteSpeciesHandler
+public class SoftDeleteSpeciesHandler
 {
     private readonly ISpeciesRepository _repository;
-    private readonly ILogger<DeleteSpeciesHandler> _logger;
+    private readonly ILogger<SoftDeleteSpeciesHandler> _logger;
 
-    public DeleteSpeciesHandler(
+    public SoftDeleteSpeciesHandler(
         ISpeciesRepository repository,
-        ILogger<DeleteSpeciesHandler> logger)
+        ILogger<SoftDeleteSpeciesHandler> logger)
     {
         _repository = repository;
         _logger = logger;
@@ -28,7 +28,14 @@ public class DeleteSpeciesHandler
 
         var species = speciesResult.Value;
 
-        var result = await _repository.Delete(species, cancellationToken);
+        species.Delete();
+
+        foreach (var breed in species.Breeds)
+        {
+            breed.Delete();
+        }
+
+        var result = await _repository.Save(species, cancellationToken);
 
         _logger.LogInformation("Deleted species with id: {speciesId}", result);
 
