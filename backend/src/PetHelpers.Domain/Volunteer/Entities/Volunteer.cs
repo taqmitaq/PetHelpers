@@ -40,9 +40,21 @@ public sealed class Volunteer : Entity<VolunteerId>
 
     public IReadOnlyList<Pet> OwnedPets => _ownedPets;
 
-    public void Delete() => _isDeleted = true;
+    public void Delete()
+    {
+        _isDeleted = true;
 
-    public void Restore() => _isDeleted = false;
+        foreach (var pet in _ownedPets)
+            pet.Delete();
+    }
+
+    public void Restore()
+    {
+        _isDeleted = false;
+
+        foreach (var pet in _ownedPets)
+            pet.Restore();
+    }
 
     public static Result<Volunteer, Error> Create(
         int yearsOfExperience,

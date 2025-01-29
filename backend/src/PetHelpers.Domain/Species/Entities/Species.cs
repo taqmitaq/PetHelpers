@@ -22,9 +22,21 @@ public sealed class Species : Entity<SpeciesId>
 
     public IReadOnlyList<Breed> Breeds => _breeds;
 
-    public void Delete() => _isDeleted = true;
+    public void Delete()
+    {
+        _isDeleted = true;
 
-    public void Restore() => _isDeleted = false;
+        foreach (var breed in _breeds)
+            breed.Delete();
+    }
+
+    public void Restore()
+    {
+        _isDeleted = false;
+
+        foreach (var breed in _breeds)
+            breed.Restore();
+    }
 
     public UnitResult<Error> UpdateTitle(Title title)
     {

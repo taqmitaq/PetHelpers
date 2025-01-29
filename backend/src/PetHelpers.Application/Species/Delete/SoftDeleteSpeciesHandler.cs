@@ -30,11 +30,6 @@ public class SoftDeleteSpeciesHandler
 
         species.Delete();
 
-        foreach (var breed in species.Breeds)
-        {
-            breed.Delete();
-        }
-
         var result = await _repository.Save(species, cancellationToken);
 
         _logger.LogInformation("Deleted species with id: {speciesId}", result);

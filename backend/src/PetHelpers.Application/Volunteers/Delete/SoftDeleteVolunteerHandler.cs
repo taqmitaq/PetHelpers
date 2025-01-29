@@ -30,11 +30,6 @@ public class SoftDeleteVolunteerHandler
 
         volunteer.Delete();
 
-        foreach (var pet in volunteer.OwnedPets)
-        {
-            pet.Delete();
-        }
-
         var result = await _repository.Save(volunteer, cancellationToken);
 
         _logger.LogInformation("Deleted volunteer with id: {volunteerId}", result);
