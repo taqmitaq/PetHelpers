@@ -2,23 +2,23 @@
 using Microsoft.Extensions.Logging;
 using PetHelpers.Domain.Shared;
 
-namespace PetHelpers.Application.Species.Update;
+namespace PetHelpers.Application.Species.Delete;
 
-public class UpdateSpeciesHandler
+public class HardDeleteSpeciesHandler
 {
     private readonly ISpeciesRepository _repository;
-    private readonly ILogger<UpdateSpeciesHandler> _logger;
+    private readonly ILogger<HardDeleteSpeciesHandler> _logger;
 
-    public UpdateSpeciesHandler(
+    public HardDeleteSpeciesHandler(
         ISpeciesRepository repository,
-        ILogger<UpdateSpeciesHandler> logger)
+        ILogger<HardDeleteSpeciesHandler> logger)
     {
         _repository = repository;
         _logger = logger;
     }
 
     public async Task<Result<Guid, Error>> Handle(
-        UpdateSpeciesRequest request,
+        DeleteSpeciesRequest request,
         CancellationToken cancellationToken)
     {
         var speciesResult = await _repository.GetById(request.SpeciesId, cancellationToken);
@@ -28,11 +28,9 @@ public class UpdateSpeciesHandler
 
         var species = speciesResult.Value;
 
-        species.UpdateTitle(request.Dto.Title);
+        var result = await _repository.Delete(species, cancellationToken);
 
-        var result = await _repository.Save(species, cancellationToken);
-
-        _logger.LogInformation("Updated species with Id: {speciesId}", result);
+        _logger.LogInformation("Deleted species with id: {speciesId}", result);
 
         return result;
     }
