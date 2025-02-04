@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
-using PetHelpers.Domain.Volunteer.Entities;
+using PetHelpers.Domain.Volunteer;
 
 namespace PetHelpers.Application.Volunteers;
 

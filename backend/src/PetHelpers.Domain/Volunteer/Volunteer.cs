@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
+using PetHelpers.Domain.Volunteer.Entities;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Domain.Volunteer.Entities;
+namespace PetHelpers.Domain.Volunteer;
 
 public sealed class Volunteer : Entity<VolunteerId>
 {
@@ -40,6 +41,18 @@ public sealed class Volunteer : Entity<VolunteerId>
 
     public IReadOnlyList<Pet> OwnedPets => _ownedPets;
 
+    public int GetPetCount() => _ownedPets.Count;
+
+    public Result<Pet, Error> GetPetById(PetId petId)
+    {
+        var pet = _ownedPets.FirstOrDefault(p => p.Id == petId);
+
+        if (pet is null)
+            return Errors.General.NotFound(petId.Value);
+
+        return pet;
+    }
+
     public void Delete()
     {
         _isDeleted = true;
@@ -63,6 +76,9 @@ public sealed class Volunteer : Entity<VolunteerId>
         FullName fullName,
         PhoneNumber phoneNumber)
     {
+        if (yearsOfExperience < 0)
+            return Errors.General.ValueIsInvalid();
+
         var volunteer = new Volunteer
         {
             YearsOfExperience = yearsOfExperience,
@@ -123,7 +139,27 @@ public sealed class Volunteer : Entity<VolunteerId>
 
     public UnitResult<Error> AddPet(Pet pet)
     {
-        // Валидация
+        var serialNumberResult = SerialNumber.Create(_ownedPets.Count + 1);
+
+        if (serialNumberResult.IsFailure)
+            return Errors.General.ValueIsInvalid("serial number");
+
+        pet.SetSerialNumber(serialNumberResult.Value);
+
+        _ownedPets.Add(pet);
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> ChangePetPlacement(Pet pet, SerialNumber serialNumber)
+    {
+        var serialNumberResult = SerialNumber.Create(_ownedPets.Count + 1);
+
+        if (serialNumberResult.IsFailure)
+            return Errors.General.ValueIsInvalid("serial number");
+
+        pet.SetSerialNumber(serialNumberResult.Value);
+
         _ownedPets.Add(pet);
 
         return UnitResult.Success<Error>();

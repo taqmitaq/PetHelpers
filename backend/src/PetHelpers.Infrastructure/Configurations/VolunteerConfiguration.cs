@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHelpers.Application.Dtos;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
-using PetHelpers.Domain.Volunteer.Entities;
+using PetHelpers.Domain.Volunteer;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
 namespace PetHelpers.Infrastructure.Configurations;

@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
+using PetHelpers.Domain.Species.Entities;
 
-namespace PetHelpers.Domain.Species.Entities;
+namespace PetHelpers.Domain.Species;
 
 public sealed class Species : Entity<SpeciesId>
 {

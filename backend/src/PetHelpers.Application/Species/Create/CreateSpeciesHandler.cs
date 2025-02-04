@@ -27,7 +27,7 @@ public class CreateSpeciesHandler
         if (species.IsSuccess)
             return Errors.Species.AlreadyExists();
 
-        var speciesToCreate = new Domain.Species.Entities.Species(request.Title);
+        var speciesToCreate = new Domain.Species.Species(request.Title);
 
         var result = await _repository.Add(speciesToCreate, cancellationToken);
 
