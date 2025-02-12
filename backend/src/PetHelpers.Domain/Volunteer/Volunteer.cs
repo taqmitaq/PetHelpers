@@ -151,17 +151,56 @@ public sealed class Volunteer : Entity<VolunteerId>
         return UnitResult.Success<Error>();
     }
 
-    public UnitResult<Error> ChangePetPlacement(Pet pet, SerialNumber serialNumber)
+    public UnitResult<Error> MovePet(SerialNumber currentSerialNumber, SerialNumber targetSerialNumber)
     {
-        var serialNumberResult = SerialNumber.Create(_ownedPets.Count + 1);
+        int currentIndex = currentSerialNumber.Value - 1;
+        int targetIndex = targetSerialNumber.Value - 1;
 
-        if (serialNumberResult.IsFailure)
-            return Errors.General.ValueIsInvalid("serial number");
+        if (currentIndex < 0 || currentIndex >= _ownedPets.Count)
+            return Errors.General.ValueIsInvalid("current number");
 
-        pet.SetSerialNumber(serialNumberResult.Value);
+        if (targetIndex < 0 || targetIndex >= _ownedPets.Count)
+            return Errors.General.ValueIsInvalid("target number");
 
-        _ownedPets.Add(pet);
+        return currentIndex > targetIndex
+            ? MovePetLeft(currentIndex, targetIndex)
+            : MovePetRight(currentIndex, targetIndex);
+    }
+
+    private UnitResult<Error> MovePetLeft(int currentIndex, int targetIndex)
+    {
+        if (currentIndex < targetIndex)
+            throw new InvalidOperationException("Incorrect movement direction");
+
+        while (currentIndex > targetIndex)
+        {
+            SwapPetsByIndex(currentIndex, currentIndex - 1);
+            currentIndex--;
+        }
 
         return UnitResult.Success<Error>();
+    }
+
+    private UnitResult<Error> MovePetRight(int currentIndex, int targetIndex)
+    {
+        if (currentIndex > targetIndex)
+            throw new InvalidOperationException("Incorrect movement direction");
+
+        while (currentIndex < targetIndex)
+        {
+            SwapPetsByIndex(currentIndex, currentIndex + 1);
+            currentIndex++;
+        }
+
+        return UnitResult.Success<Error>();
+    }
+
+    private void SwapPetsByIndex(int first, int second)
+    {
+        (_ownedPets[first], _ownedPets[second]) = (_ownedPets[second], _ownedPets[first]);
+
+        var temp = _ownedPets[first].SerialNumber;
+        _ownedPets[first].SetSerialNumber(_ownedPets[second].SerialNumber);
+        _ownedPets[second].SetSerialNumber(temp);
     }
 }
