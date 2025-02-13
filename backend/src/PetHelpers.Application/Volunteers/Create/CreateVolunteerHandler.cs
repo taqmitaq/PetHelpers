@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetHelpers.Domain.Shared;
-using PetHelpers.Domain.Volunteer.Entities;
+using PetHelpers.Domain.Volunteer;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
 namespace PetHelpers.Application.Volunteers.Create;

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PetHelpers.Application.Species;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
-using PetHelpers.Domain.Species.Entities;
+using PetHelpers.Domain.Species;
 
 namespace PetHelpers.Infrastructure.Repositories;
 

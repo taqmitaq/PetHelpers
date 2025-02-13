@@ -42,6 +42,8 @@ public sealed class Pet : Entity<PetId>
 
     public Status HelpStatus { get; private set; }
 
+    public SerialNumber SerialNumber { get; private set; }
+
     public SpeciesAndBreed SpeciesAndBreed { get; private set; }
 
     public PhoneNumber OwnersPhoneNumber { get; private set; }
@@ -63,6 +65,12 @@ public sealed class Pet : Entity<PetId>
         SpeciesAndBreed speciesAndBreed,
         PhoneNumber ownersPhoneNumber)
     {
+        if (height <= 0)
+            return Errors.General.ValueIsInvalid();
+
+        if (weight <= 0)
+            return Errors.General.ValueIsInvalid();
+
         var pet = new Pet
         {
             PetName = petName,
@@ -87,4 +95,7 @@ public sealed class Pet : Entity<PetId>
     public void Delete() => _isDeleted = true;
 
     public void Restore() => _isDeleted = false;
+
+    public void SetSerialNumber(SerialNumber serialNumber)
+        => SerialNumber = serialNumber;
 }

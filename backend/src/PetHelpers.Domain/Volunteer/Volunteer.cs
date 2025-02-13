@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
+using PetHelpers.Domain.Volunteer.Entities;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Domain.Volunteer.Entities;
+namespace PetHelpers.Domain.Volunteer;
 
 public sealed class Volunteer : Entity<VolunteerId>
 {
@@ -40,6 +41,18 @@ public sealed class Volunteer : Entity<VolunteerId>
 
     public IReadOnlyList<Pet> OwnedPets => _ownedPets;
 
+    public int GetPetCount() => _ownedPets.Count;
+
+    public Result<Pet, Error> GetPetById(PetId petId)
+    {
+        var pet = _ownedPets.FirstOrDefault(p => p.Id == petId);
+
+        if (pet is null)
+            return Errors.General.NotFound(petId.Value);
+
+        return pet;
+    }
+
     public void Delete()
     {
         _isDeleted = true;
@@ -63,6 +76,9 @@ public sealed class Volunteer : Entity<VolunteerId>
         FullName fullName,
         PhoneNumber phoneNumber)
     {
+        if (yearsOfExperience < 0)
+            return Errors.General.ValueIsInvalid();
+
         var volunteer = new Volunteer
         {
             YearsOfExperience = yearsOfExperience,
@@ -123,9 +139,68 @@ public sealed class Volunteer : Entity<VolunteerId>
 
     public UnitResult<Error> AddPet(Pet pet)
     {
-        // Валидация
+        var serialNumberResult = SerialNumber.Create(_ownedPets.Count + 1);
+
+        if (serialNumberResult.IsFailure)
+            return Errors.General.ValueIsInvalid("serial number");
+
+        pet.SetSerialNumber(serialNumberResult.Value);
+
         _ownedPets.Add(pet);
 
         return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> MovePet(SerialNumber currentSerialNumber, SerialNumber targetSerialNumber)
+    {
+        int currentIndex = currentSerialNumber.Value - 1;
+        int targetIndex = targetSerialNumber.Value - 1;
+
+        if (currentIndex < 0 || currentIndex >= _ownedPets.Count)
+            return Errors.General.ValueIsInvalid("current number");
+
+        if (targetIndex < 0 || targetIndex >= _ownedPets.Count)
+            return Errors.General.ValueIsInvalid("target number");
+
+        return currentIndex > targetIndex
+            ? MovePetLeft(currentIndex, targetIndex)
+            : MovePetRight(currentIndex, targetIndex);
+    }
+
+    private UnitResult<Error> MovePetLeft(int currentIndex, int targetIndex)
+    {
+        if (currentIndex < targetIndex)
+            throw new InvalidOperationException("Incorrect movement direction");
+
+        while (currentIndex > targetIndex)
+        {
+            SwapPetsByIndex(currentIndex, currentIndex - 1);
+            currentIndex--;
+        }
+
+        return UnitResult.Success<Error>();
+    }
+
+    private UnitResult<Error> MovePetRight(int currentIndex, int targetIndex)
+    {
+        if (currentIndex > targetIndex)
+            throw new InvalidOperationException("Incorrect movement direction");
+
+        while (currentIndex < targetIndex)
+        {
+            SwapPetsByIndex(currentIndex, currentIndex + 1);
+            currentIndex++;
+        }
+
+        return UnitResult.Success<Error>();
+    }
+
+    private void SwapPetsByIndex(int first, int second)
+    {
+        (_ownedPets[first], _ownedPets[second]) = (_ownedPets[second], _ownedPets[first]);
+
+        var temp = _ownedPets[first].SerialNumber;
+        _ownedPets[first].SetSerialNumber(_ownedPets[second].SerialNumber);
+        _ownedPets[second].SetSerialNumber(temp);
     }
 }
