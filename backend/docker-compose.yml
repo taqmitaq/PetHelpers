@@ -20,6 +20,20 @@
     ports:
       - "5431:5341"
       - "8081:80"
+  minio:
+    container_name: minio
+    image: minio/minio
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9001"
+      
 
 volumes:
   postgres-data:
+  minio-data:

@@ -20,7 +20,8 @@ public class CreateVolunteerHandler
     }
 
     public async Task<Result<Guid, Error>> Handle(
-        CreateVolunteerRequest request, CancellationToken cancellationToken)
+        CreateVolunteerRequest request,
+        CancellationToken cancellationToken)
     {
         var description = Description.Create(request.Description).Value;
 
