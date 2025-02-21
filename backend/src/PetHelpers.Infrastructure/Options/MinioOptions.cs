@@ -2,7 +2,7 @@
 
 public class MinioOptions
 {
-    public const string MINIO = "MINIO";
+    public const string MINIO = "Minio";
 
     public string Endpoint { get; init; } = string.Empty;
 

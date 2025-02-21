@@ -28,7 +28,7 @@ public static class Inject
         this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<MinioOptions>(
-            configuration.GetSection("Minio"));
+            configuration.GetSection(MinioOptions.MINIO));
 
         services.AddMinio(options =>
         {

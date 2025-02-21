@@ -18,7 +18,8 @@ public class CreateSpeciesHandler
     }
 
     public async Task<Result<Guid, Error>> Handle(
-        CreateSpeciesRequest request, CancellationToken cancellationToken)
+        CreateSpeciesRequest request,
+        CancellationToken cancellationToken)
     {
         var title = Title.Create(request.Title).Value;
 

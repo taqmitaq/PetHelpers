@@ -10,8 +10,8 @@ public interface IFileProvider
         FileData fileData, CancellationToken cancellationToken);
 
     public Task<Result<string, Error>> Get(
-        FileData fileData, CancellationToken cancellationToken);
+        FileDto dto, CancellationToken cancellationToken);
 
-    public Task<Result<string, Error>> Delete(
-        FileData fileData, CancellationToken cancellationToken);
+    public Task<UnitResult<Error>> Delete(
+        FileDto dto, CancellationToken cancellationToken);
 }
