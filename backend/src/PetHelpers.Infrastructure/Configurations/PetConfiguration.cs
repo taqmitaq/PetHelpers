@@ -137,5 +137,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .HasColumnName("postal_code")
                 .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH);
         });
+
+        builder.Property(p => p.Photos)
+            .JsonValueObjectCollectionConversion()
+            .HasColumnName("photos");
     }
 }

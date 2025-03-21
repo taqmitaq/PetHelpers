@@ -7,6 +7,8 @@ namespace PetHelpers.Domain.Volunteer.Entities;
 
 public sealed class Pet : Entity<PetId>
 {
+    private readonly List<Photo> _photos = [];
+
     private readonly List<Requisite> _requisites = [];
 
     private bool _isDeleted = false;
@@ -47,6 +49,8 @@ public sealed class Pet : Entity<PetId>
     public SpeciesAndBreed SpeciesAndBreed { get; private set; }
 
     public PhoneNumber OwnersPhoneNumber { get; private set; }
+
+    public IReadOnlyList<Photo> Photos => _photos;
 
     public IReadOnlyList<Requisite> Requisites => _requisites;
 

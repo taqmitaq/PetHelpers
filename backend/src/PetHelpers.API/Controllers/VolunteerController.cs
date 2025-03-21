@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetHelpers.API.Extensions;
 using PetHelpers.API.Response;
 using PetHelpers.Application.Dtos;
+using PetHelpers.Application.Volunteers.AddPet;
 using PetHelpers.Application.Volunteers.Create;
 using PetHelpers.Application.Volunteers.Delete;
 using PetHelpers.Application.Volunteers.UpdateMainInfo;
@@ -134,6 +135,31 @@ public class VolunteerController : ApplicationController
         CancellationToken cancellationToken)
     {
         var request = new DeleteVolunteerRequest(id);
+
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (validationResult.IsValid == false)
+        {
+            return validationResult.ToValidationErrorResponse();
+        }
+
+        var result = await handler.Handle(request, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToErrorResponse();
+
+        return Ok(Envelope.Success(result.Value));
+    }
+
+    [HttpPost("{id:guid}/pet")]
+    public async Task<ActionResult<Guid>> AddPet(
+        [FromRoute] Guid id,
+        [FromBody] AddPetDto dto,
+        [FromServices] AddPetHandler handler,
+        [FromServices] IValidator<AddPetRequest> validator,
+        CancellationToken cancellationToken)
+    {
+        var request = new AddPetRequest(id, dto);
 
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
