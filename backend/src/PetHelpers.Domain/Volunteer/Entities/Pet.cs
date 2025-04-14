@@ -102,4 +102,7 @@ public sealed class Pet : Entity<PetId>
 
     public void SetSerialNumber(SerialNumber serialNumber)
         => SerialNumber = serialNumber;
+
+    public void AddPhoto(Photo photo)
+        => _photos.Add(photo);
 }

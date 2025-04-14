@@ -4,6 +4,7 @@ using PetHelpers.Application.Volunteers;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
 using PetHelpers.Domain.Volunteer;
+using PetHelpers.Domain.Volunteer.Entities;
 
 namespace PetHelpers.Infrastructure.Repositories;
 
@@ -53,5 +54,18 @@ public class VolunteerRepository : IVolunteerRepository
             return Errors.General.NotFound(volunteerId);
 
         return volunteer;
+    }
+
+    public async Task<Result<Pet, Error>> GetPetById(PetId petId, CancellationToken cancellationToken)
+    {
+        var pet = await _dbContext.Volunteers
+            .Include(v => v.OwnedPets)
+            .Select(x => x.OwnedPets.FirstOrDefault(p => p.Id == petId))
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (pet is null)
+            return Errors.General.NotFound(petId);
+
+        return pet;
     }
 }

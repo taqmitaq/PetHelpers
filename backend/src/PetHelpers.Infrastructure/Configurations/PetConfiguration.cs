@@ -28,6 +28,10 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
 
+        builder.Navigation(p => p.Volunteer)
+            .AutoInclude()
+            .IsRequired();
+
         builder.Property(p => p.Weight)
             .IsRequired();
 
@@ -139,7 +143,19 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         });
 
         builder.Property(p => p.Photos)
-            .JsonValueObjectCollectionConversion()
+            .HasConversion(
+                photos => JsonSerializer.Serialize(
+                    photos.Select(
+                        p => new PhotoDto(p.PathToStorage)),
+                    JsonSerializerOptions.Default),
+                json => JsonSerializer.Deserialize<List<PhotoDto>>(json, JsonSerializerOptions.Default)!
+                    .Select(dto => Photo.Create(dto.PathToStorage).Value)
+                    .ToList(),
+                new ValueComparer<IReadOnlyList<Photo>>(
+                    (c1, c2) => c1!.SequenceEqual(c2!),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
+                    c => c.ToList()))
+            .HasColumnType("jsonb")
             .HasColumnName("photos");
     }
 }

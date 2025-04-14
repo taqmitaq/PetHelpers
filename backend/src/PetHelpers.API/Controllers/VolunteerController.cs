@@ -4,6 +4,7 @@ using PetHelpers.API.Extensions;
 using PetHelpers.API.Response;
 using PetHelpers.Application.Dtos;
 using PetHelpers.Application.Volunteers.AddPet;
+using PetHelpers.Application.Volunteers.AddPetPhotos;
 using PetHelpers.Application.Volunteers.Create;
 using PetHelpers.Application.Volunteers.Delete;
 using PetHelpers.Application.Volunteers.UpdateMainInfo;
@@ -160,6 +161,37 @@ public class VolunteerController : ApplicationController
         CancellationToken cancellationToken)
     {
         var request = new AddPetRequest(id, dto);
+
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (validationResult.IsValid == false)
+        {
+            return validationResult.ToValidationErrorResponse();
+        }
+
+        var result = await handler.Handle(request, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToErrorResponse();
+
+        return Ok(Envelope.Success(result.Value));
+    }
+
+    [HttpPost("pet/{id:guid}/photo")]
+    public async Task<IActionResult> Upload(
+        [FromRoute] Guid id,
+        IFormFile file,
+        [FromServices] AddPetPhotosHandler handler,
+        [FromServices] IValidator<AddPetPhotosRequest> validator,
+        CancellationToken cancellationToken)
+    {
+        await using var stream = file.OpenReadStream();
+
+        var objectName = Guid.NewGuid() + "." + file.FileName.Split('.').Last();
+
+        var fileData = new FileData(stream, "photos", objectName);
+
+        var request = new AddPetPhotosRequest(id, fileData);
 
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 

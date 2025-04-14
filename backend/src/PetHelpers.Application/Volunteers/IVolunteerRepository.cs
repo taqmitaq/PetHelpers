@@ -2,6 +2,7 @@
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
 using PetHelpers.Domain.Volunteer;
+using PetHelpers.Domain.Volunteer.Entities;
 
 namespace PetHelpers.Application.Volunteers;
 
@@ -15,4 +16,7 @@ public interface IVolunteerRepository
 
     Task<Result<Volunteer, Error>> GetById(
         VolunteerId volunteerId, CancellationToken cancellationToken);
+
+    Task<Result<Pet, Error>> GetPetById(
+        PetId petId, CancellationToken cancellationToken);
 }

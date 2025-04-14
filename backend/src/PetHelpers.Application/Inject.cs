@@ -7,6 +7,7 @@ using PetHelpers.Application.Species.Create;
 using PetHelpers.Application.Species.Delete;
 using PetHelpers.Application.Species.Update;
 using PetHelpers.Application.Volunteers.AddPet;
+using PetHelpers.Application.Volunteers.AddPetPhotos;
 using PetHelpers.Application.Volunteers.Create;
 using PetHelpers.Application.Volunteers.Delete;
 using PetHelpers.Application.Volunteers.UpdateMainInfo;
@@ -36,6 +37,7 @@ public static class Inject
         services.AddScoped<UploadFileHandler>();
 
         services.AddScoped<AddPetHandler>();
+        services.AddScoped<AddPetPhotosHandler>();
 
         services.AddValidatorsFromAssembly(typeof(CreateSpeciesHandler).Assembly);
 

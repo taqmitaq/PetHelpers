@@ -148,6 +148,8 @@ public sealed class Volunteer : Entity<VolunteerId>
 
         _ownedPets.Add(pet);
 
+        UpdateStatus(pet.HelpStatus);
+
         return UnitResult.Success<Error>();
     }
 
@@ -202,5 +204,19 @@ public sealed class Volunteer : Entity<VolunteerId>
         var temp = _ownedPets[first].SerialNumber;
         _ownedPets[first].SetSerialNumber(_ownedPets[second].SerialNumber);
         _ownedPets[second].SetSerialNumber(temp);
+    }
+
+    private int UpdateStatus(Status status)
+    {
+        if (status == Status.FoundHome)
+            return PetsFoundHome = _ownedPets.Count(p => p.HelpStatus == status);
+
+        if (status == Status.LookingForHome)
+            return PetsLookingForHome = _ownedPets.Count(p => p.HelpStatus == status);
+
+        if (status == Status.NeedsHelp)
+            return PetsInTreatment = _ownedPets.Count(p => p.HelpStatus == status);
+
+        throw new InvalidOperationException("Incorrect status");
     }
 }

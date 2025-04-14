@@ -31,7 +31,7 @@ public class AddPetHandler
 
         if (speciesResult.IsFailure)
         {
-            return Errors.General.ValueIsInvalid("Species");
+            return speciesResult.Error;
         }
 
         var species = speciesResult.Value;
@@ -95,7 +95,7 @@ public class AddPetHandler
         var volunteerResult = await _volunteerRepository.GetById(request.VolunteerId, cancellationToken);
 
         if (volunteerResult.IsFailure)
-            return Errors.General.ValueIsInvalid("VolunteerId");
+            return volunteerResult.Error;
 
         var volunteer = volunteerResult.Value;
 

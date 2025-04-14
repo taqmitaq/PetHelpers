@@ -23,9 +23,9 @@ public class CreateSpeciesHandler
     {
         var title = Title.Create(request.Title).Value;
 
-        var species = await _repository.GetByTitle(title, cancellationToken);
+        var speciesResult = await _repository.GetByTitle(title, cancellationToken);
 
-        if (species.IsSuccess)
+        if (speciesResult.IsSuccess)
             return Errors.Species.AlreadyExists();
 
         var speciesToCreate = new Domain.Species.Species(request.Title);
