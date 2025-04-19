@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Database;
+using PetHelpers.Application.Extensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
@@ -9,29 +11,40 @@ public class UpdateVolunteerSocialMediasHandler
 {
     private readonly IVolunteerRepository _repository;
     private readonly ILogger<UpdateVolunteerSocialMediasHandler> _logger;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly UpdateVolunteerSocialMediasCommandValidator _validator;
 
     public UpdateVolunteerSocialMediasHandler(
         IVolunteerRepository repository,
-        ILogger<UpdateVolunteerSocialMediasHandler> logger)
+        ILogger<UpdateVolunteerSocialMediasHandler> logger,
+        IUnitOfWork unitOfWork,
+        UpdateVolunteerSocialMediasCommandValidator validator)
     {
         _repository = repository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        UpdateVolunteerSocialMediasRequest request,
+    public async Task<Result<Guid, ErrorList>> Handle(
+        UpdateVolunteerSocialMediasCommand command,
         CancellationToken cancellationToken)
     {
-        var volunteerResult = await _repository.GetById(request.VolunteerId, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+
+        if (validationResult.IsValid == false)
+            return validationResult.ToList();
+
+        var volunteerResult = await _repository.GetById(command.VolunteerId, cancellationToken);
 
         if (volunteerResult.IsFailure)
-            return volunteerResult.Error;
+            return volunteerResult.Error.ToErrorList();
 
         var volunteer = volunteerResult.Value;
 
         var socialMedias = new List<SocialMedia>();
 
-        foreach (var dto in request.Dto.SocialMedias)
+        foreach (var dto in command.SocialMedias)
         {
             var title = Title.Create(dto.Title).Value;
 
@@ -42,10 +55,11 @@ public class UpdateVolunteerSocialMediasHandler
 
         volunteer.UpdateSocialMedias(socialMedias);
 
-        var result = await _repository.Save(volunteer, cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
 
-        _logger.LogInformation("Updated social medias for volunteer with Id: {volunteer.Id}", result);
+        _logger.LogInformation("Updated social medias for volunteer with Id: {volunteer.Id}",
+            volunteer.Id.Value);
 
-        return result;
+        return volunteer.Id.Value;
     }
 }

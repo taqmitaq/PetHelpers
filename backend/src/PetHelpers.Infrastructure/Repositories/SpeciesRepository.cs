@@ -20,25 +20,12 @@ public class SpeciesRepository : ISpeciesRepository
     {
         await _dbContext.Species.AddAsync(species, cancellationToken);
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
         return species.Id;
     }
 
-    public async Task<Guid> Save(Species species, CancellationToken cancellationToken)
-    {
-        _dbContext.Species.Attach(species);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return species.Id;
-    }
-
-    public async Task<Guid> Delete(Species species, CancellationToken cancellationToken)
+    public Guid Delete(Species species, CancellationToken cancellationToken)
     {
         _dbContext.Species.Remove(species);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return species.Id;
     }

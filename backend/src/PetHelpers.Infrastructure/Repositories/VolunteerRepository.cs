@@ -21,25 +21,12 @@ public class VolunteerRepository : IVolunteerRepository
     {
         await _dbContext.Volunteers.AddAsync(volunteer, cancellationToken);
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
         return volunteer.Id;
     }
 
-    public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken)
-    {
-        _dbContext.Attach(volunteer);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return volunteer.Id;
-    }
-
-    public async Task<Guid> Delete(Volunteer volunteer, CancellationToken cancellationToken)
+    public Guid Delete(Volunteer volunteer, CancellationToken cancellationToken)
     {
         _dbContext.Volunteers.Remove(volunteer);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return volunteer.Id;
     }

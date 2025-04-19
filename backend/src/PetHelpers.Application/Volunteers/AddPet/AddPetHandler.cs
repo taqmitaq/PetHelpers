@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Database;
+using PetHelpers.Application.Extensions;
 using PetHelpers.Application.Species;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.Entities;
@@ -12,69 +14,80 @@ public class AddPetHandler
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly ISpeciesRepository _speciesRepository;
     private readonly ILogger<AddPetHandler> _logger;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly AddPetCommandValidator _validator;
 
     public AddPetHandler(
         IVolunteerRepository volunteerRepository,
         ISpeciesRepository speciesRepository,
-        ILogger<AddPetHandler> logger)
+        ILogger<AddPetHandler> logger,
+        IUnitOfWork unitOfWork,
+        AddPetCommandValidator validator)
     {
         _volunteerRepository = volunteerRepository;
         _speciesRepository = speciesRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        AddPetRequest request,
+    public async Task<Result<Guid, ErrorList>> Handle(
+        AddPetCommand command,
         CancellationToken cancellationToken)
     {
-        var speciesResult = await _speciesRepository.GetByTitle(request.Dto.Species, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+
+        if (validationResult.IsValid == false)
+            return validationResult.ToList();
+
+        var speciesResult = await _speciesRepository.GetByTitle(command.Species, cancellationToken);
 
         if (speciesResult.IsFailure)
         {
-            return speciesResult.Error;
+            return speciesResult.Error.ToErrorList();
         }
 
         var species = speciesResult.Value;
 
         var breeds = speciesResult.Value.Breeds;
 
-        if (breeds.All(b => b.Title != request.Dto.Breed))
+        if (breeds.All(b => b.Title != command.Breed))
         {
-            return Errors.General.ValueIsInvalid("Breed");
+            return Errors.General.ValueIsInvalid("Breed").ToErrorList();
         }
 
-        var breed = breeds.First(x => x.Title == request.Dto.Breed);
+        var breed = breeds.First(x => x.Title == command.Breed);
 
-        var height = request.Dto.Height;
+        var height = command.Height;
 
-        var weight = request.Dto.Weight;
+        var weight = command.Weight;
 
-        var isCastrated = request.Dto.IsCastrated;
+        var isCastrated = command.IsCastrated;
 
-        var isVaccinated = request.Dto.IsVaccinated;
+        var isVaccinated = command.IsVaccinated;
 
-        var birthDate = request.Dto.BirthDate;
+        var birthDate = command.BirthDate;
 
-        var petName = PetName.Create(request.Dto.PetName).Value;
+        var petName = PetName.Create(command.PetName).Value;
 
-        var description = Description.Create(request.Dto.Description).Value;
+        var description = Description.Create(command.Description).Value;
 
-        var color = Color.Create(request.Dto.Color).Value;
+        var color = Color.Create(command.Color).Value;
 
-        var healthInfo = HealthInfo.Create(request.Dto.HealthInfo).Value;
+        var healthInfo = HealthInfo.Create(command.HealthInfo).Value;
 
         var (city, region, postalCode) = (
-            request.Dto.Location.City,
-            request.Dto.Location.Region,
-            request.Dto.Location.PostalCode);
+            command.Location.City,
+            command.Location.Region,
+            command.Location.PostalCode);
 
         var location = Location.Create(city, region, postalCode).Value;
 
-        var helpStatus = Status.Create(request.Dto.HelpStatus).Value;
+        var helpStatus = Status.Create(command.HelpStatus).Value;
 
         var speciesAndBreed = new SpeciesAndBreed(species.Id, breed.Id);
 
-        var ownersPhoneNumber = PhoneNumber.Create(request.Dto.OwnersPhoneNumber).Value;
+        var ownersPhoneNumber = PhoneNumber.Create(command.OwnersPhoneNumber).Value;
 
         var pet = Pet.Create(
                 height,
@@ -92,19 +105,22 @@ public class AddPetHandler
                 ownersPhoneNumber)
             .Value;
 
-        var volunteerResult = await _volunteerRepository.GetById(request.VolunteerId, cancellationToken);
+        var volunteerResult = await _volunteerRepository.GetById(command.VolunteerId, cancellationToken);
 
         if (volunteerResult.IsFailure)
-            return volunteerResult.Error;
+            return volunteerResult.Error.ToErrorList();
 
         var volunteer = volunteerResult.Value;
 
         volunteer.AddPet(pet);
 
-        var result = await _volunteerRepository.Save(volunteer, cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
 
-        _logger.LogInformation("Pet with id {petId} added to volunteer with id {VolunteerId}", pet.Id, volunteer.Id);
+        _logger.LogInformation(
+            "Pet with id {petId} added to volunteer with id {VolunteerId}",
+            pet.Id.Value,
+            volunteer.Id.Value);
 
-        return result;
+        return pet.Id.Value;
     }
 }

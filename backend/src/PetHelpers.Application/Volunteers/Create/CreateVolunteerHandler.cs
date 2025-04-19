@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Database;
+using PetHelpers.Application.Extensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer;
 using PetHelpers.Domain.Volunteer.ValueObjects;
@@ -10,40 +12,51 @@ public class CreateVolunteerHandler
 {
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly ILogger<CreateVolunteerHandler> _logger;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly CreateVolunteerCommandValidator _validator;
 
     public CreateVolunteerHandler(
         IVolunteerRepository volunteerRepository,
-        ILogger<CreateVolunteerHandler> logger)
+        ILogger<CreateVolunteerHandler> logger,
+        IUnitOfWork unitOfWork,
+        CreateVolunteerCommandValidator validator)
     {
         _volunteerRepository = volunteerRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        CreateVolunteerRequest request,
+    public async Task<Result<Guid, ErrorList>> Handle(
+        CreateVolunteerCommand command,
         CancellationToken cancellationToken)
     {
-        var description = Description.Create(request.Description).Value;
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
-        var email = Email.Create(request.Email).Value;
+        if (validationResult.IsValid == false)
+            return validationResult.ToList();
 
-        var fullName = FullName.Create(request.FullName.FirstName, request.FullName.LastName).Value;
+        var description = Description.Create(command.Description).Value;
 
-        var phoneNumber = PhoneNumber.Create(request.PhoneNumber).Value;
+        var email = Email.Create(command.Email).Value;
+
+        var fullName = FullName.Create(command.FullName.FirstName, command.FullName.LastName).Value;
+
+        var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
 
         var volunteerResult = Volunteer.Create(
-            request.YearsOfExperience,
+            command.YearsOfExperience,
             description,
             email,
             fullName,
             phoneNumber);
 
         if (volunteerResult.IsFailure)
-            return volunteerResult.Error;
+            return volunteerResult.Error.ToErrorList();
 
         var volunteer = volunteerResult.Value;
 
-        foreach (var sm in request.SocialMedias)
+        foreach (var sm in command.SocialMedias)
         {
             var title = Title.Create(sm.Title).Value;
 
@@ -52,7 +65,7 @@ public class CreateVolunteerHandler
             volunteer.AddSocialMedia(new SocialMedia(title, link));
         }
 
-        foreach (var r in request.Requisites)
+        foreach (var r in command.Requisites)
         {
             var title = Title.Create(r.Title).Value;
 
@@ -62,6 +75,8 @@ public class CreateVolunteerHandler
         }
 
         var result = await _volunteerRepository.Add(volunteer, cancellationToken);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Created volunteer with Id: {volunteerId}", result);
 
