@@ -15,8 +15,8 @@ public record AddPetRequest(
     string HealthInfo,
     LocationDto Location,
     string HelpStatus,
-    string Species,
-    string Breed,
+    Guid SpeciesId,
+    Guid BreedId,
     string OwnersPhoneNumber)
 {
     public AddPetCommand ToCommand(Guid id) => new(
@@ -32,7 +32,7 @@ public record AddPetRequest(
         HealthInfo,
         Location,
         HelpStatus,
-        Species,
-        Breed,
+        SpeciesId,
+        BreedId,
         OwnersPhoneNumber);
 }

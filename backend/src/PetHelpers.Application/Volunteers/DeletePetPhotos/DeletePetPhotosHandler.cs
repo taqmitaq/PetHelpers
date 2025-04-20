@@ -78,7 +78,7 @@ public class DeletePetPhotosHandler
 
             await _unitOfWork.SaveChanges(cancellationToken);
 
-            transaction.Commit();
+            await transaction.CommitAsync(cancellationToken);
 
             _logger.LogInformation("Photos deleted from pet with id {petId}", pet.Id.Value);
 
@@ -91,7 +91,7 @@ public class DeletePetPhotosHandler
                 "Can not delete photos from pet with {id}",
                 command.PetId);
 
-            transaction.Rollback();
+            await transaction.RollbackAsync(cancellationToken);
 
             return Error.Failure("file.delete", "Can not delete photos from pet")
                 .ToErrorList();

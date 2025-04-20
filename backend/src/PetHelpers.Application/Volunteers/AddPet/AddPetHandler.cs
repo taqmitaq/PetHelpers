@@ -40,7 +40,7 @@ public class AddPetHandler
         if (validationResult.IsValid == false)
             return validationResult.ToList();
 
-        var speciesResult = await _speciesRepository.GetByTitle(command.Species, cancellationToken);
+        var speciesResult = await _speciesRepository.GetById(command.SpeciesId, cancellationToken);
 
         if (speciesResult.IsFailure)
         {
@@ -49,14 +49,14 @@ public class AddPetHandler
 
         var species = speciesResult.Value;
 
-        var breeds = speciesResult.Value.Breeds;
+        var breeds = species.Breeds;
 
-        if (breeds.All(b => b.Title != command.Breed))
+        if (breeds.All(b => b.Id != command.BreedId))
         {
             return Errors.General.ValueIsInvalid("Breed").ToErrorList();
         }
 
-        var breed = breeds.First(x => x.Title == command.Breed);
+        var breed = breeds.First(b => b.Id == command.BreedId);
 
         var height = command.Height;
 

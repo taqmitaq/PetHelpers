@@ -90,7 +90,7 @@ public class AddPetPhotosHandler
 
             await _unitOfWork.SaveChanges(cancellationToken);
 
-            transaction.Commit();
+            await transaction.CommitAsync(cancellationToken);
 
             _logger.LogInformation("Photos added to pet with id {petId}", pet.Id.Value);
 
@@ -103,7 +103,7 @@ public class AddPetPhotosHandler
                 "Can not add photos to pet with {id}",
                 command.PetId);
 
-            transaction.Rollback();
+            await transaction.RollbackAsync(cancellationToken);
 
             return Error.Failure("file.upload", "Can not add photos to pet")
                 .ToErrorList();

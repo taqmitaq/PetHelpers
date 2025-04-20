@@ -15,6 +15,6 @@ public record AddPetCommand(
     string HealthInfo,
     LocationDto Location,
     string HelpStatus,
-    string Species,
-    string Breed,
+    Guid SpeciesId,
+    Guid BreedId,
     string OwnersPhoneNumber);
