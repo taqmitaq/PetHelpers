@@ -121,11 +121,11 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .HasColumnName("help_status");
         });
 
-        builder.ComplexProperty(p => p.SerialNumber, b =>
+        builder.ComplexProperty(p => p.Position, b =>
         {
             b.IsRequired();
             b.Property(s => s.Value)
-                .HasColumnName("serial_number");
+                .HasColumnName("position");
         });
 
         builder.ComplexProperty(p => p.Location, b =>

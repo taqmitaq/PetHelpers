@@ -44,7 +44,7 @@ public sealed class Pet : Entity<PetId>
 
     public Status HelpStatus { get; private set; }
 
-    public SerialNumber SerialNumber { get; private set; }
+    public Position Position { get; private set; }
 
     public SpeciesAndBreed SpeciesAndBreed { get; private set; }
 
@@ -100,8 +100,8 @@ public sealed class Pet : Entity<PetId>
 
     public void Restore() => _isDeleted = false;
 
-    public void SetSerialNumber(SerialNumber serialNumber)
-        => SerialNumber = serialNumber;
+    public void SetPosition(Position position)
+        => Position = position;
 
     public void AddPhoto(Photo photo) =>
             _photos.Add(photo);

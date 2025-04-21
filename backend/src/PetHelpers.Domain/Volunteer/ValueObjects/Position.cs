@@ -3,25 +3,25 @@ using PetHelpers.Domain.Shared;
 
 namespace PetHelpers.Domain.Volunteer.ValueObjects;
 
-public class SerialNumber : ComparableValueObject
+public class Position : ComparableValueObject
 {
-    public static SerialNumber First = new(1);
+    public static Position First = new(1);
 
-    private SerialNumber(int value)
+    private Position(int value)
     {
         Value = value;
     }
 
     public int Value { get; }
 
-    public static Result<SerialNumber, Error> Create(int number)
+    public static Result<Position, Error> Create(int position)
     {
-        if (number <= 0)
+        if (position <= 0)
         {
-            return Errors.General.ValueIsInvalid("serial number");
+            return Errors.General.ValueIsInvalid("position");
         }
 
-        return new SerialNumber(number);
+        return new Position(position);
     }
 
     protected override IEnumerable<IComparable> GetComparableEqualityComponents()

@@ -139,12 +139,12 @@ public sealed class Volunteer : Entity<VolunteerId>
 
     public UnitResult<Error> AddPet(Pet pet)
     {
-        var serialNumberResult = SerialNumber.Create(_ownedPets.Count + 1);
+        var positionResult = Position.Create(_ownedPets.Count + 1);
 
-        if (serialNumberResult.IsFailure)
-            return Errors.General.ValueIsInvalid("serial number");
+        if (positionResult.IsFailure)
+            return Errors.General.ValueIsInvalid("position");
 
-        pet.SetSerialNumber(serialNumberResult.Value);
+        pet.SetPosition(positionResult.Value);
 
         _ownedPets.Add(pet);
 
@@ -153,16 +153,16 @@ public sealed class Volunteer : Entity<VolunteerId>
         return UnitResult.Success<Error>();
     }
 
-    public UnitResult<Error> MovePet(SerialNumber currentSerialNumber, SerialNumber targetSerialNumber)
+    public UnitResult<Error> MovePet(Position currentPosition, Position targetPosition)
     {
-        int currentIndex = currentSerialNumber.Value - 1;
-        int targetIndex = targetSerialNumber.Value - 1;
+        int currentIndex = currentPosition.Value - 1;
+        int targetIndex = targetPosition.Value - 1;
 
         if (currentIndex < 0 || currentIndex >= _ownedPets.Count)
-            return Errors.General.ValueIsInvalid("current number");
+            return Errors.General.ValueIsInvalid("current position");
 
         if (targetIndex < 0 || targetIndex >= _ownedPets.Count)
-            return Errors.General.ValueIsInvalid("target number");
+            return Errors.General.ValueIsInvalid("target position");
 
         return currentIndex > targetIndex
             ? MovePetLeft(currentIndex, targetIndex)
@@ -201,9 +201,9 @@ public sealed class Volunteer : Entity<VolunteerId>
     {
         (_ownedPets[first], _ownedPets[second]) = (_ownedPets[second], _ownedPets[first]);
 
-        var temp = _ownedPets[first].SerialNumber;
-        _ownedPets[first].SetSerialNumber(_ownedPets[second].SerialNumber);
-        _ownedPets[second].SetSerialNumber(temp);
+        var temp = _ownedPets[first].Position;
+        _ownedPets[first].SetPosition(_ownedPets[second].Position);
+        _ownedPets[second].SetPosition(temp);
     }
 
     private int UpdateStatus(Status status)

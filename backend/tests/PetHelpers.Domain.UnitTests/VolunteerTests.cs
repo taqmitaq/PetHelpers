@@ -57,7 +57,7 @@ public class VolunteerTests
 
         result.IsSuccess.Should().BeTrue();
         addedPetResult.IsSuccess.Should().BeTrue();
-        addedPetResult.Value.SerialNumber.Should().Be(SerialNumber.First);
+        addedPetResult.Value.Position.Should().Be(Position.First);
     }
 
     [Fact]
@@ -129,11 +129,11 @@ public class VolunteerTests
 
         // Assert
         var addedPetResult = volunteer.GetPetById(petToAdd.Id);
-        var serialNumber = SerialNumber.Create(petsCount + 1).Value;
+        var position = Position.Create(petsCount + 1).Value;
 
         result.IsSuccess.Should().BeTrue();
         addedPetResult.IsSuccess.Should().BeTrue();
-        addedPetResult.Value.SerialNumber.Should().Be(serialNumber);
+        addedPetResult.Value.Position.Should().Be(position);
     }
 
     [Fact]
@@ -189,7 +189,7 @@ public class VolunteerTests
         var petToMove2 = volunteer.OwnedPets[7];
 
         // Act
-        var result = volunteer.MovePet(petToMove1.SerialNumber, petToMove2.SerialNumber);
+        var result = volunteer.MovePet(petToMove1.Position, petToMove2.Position);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -202,7 +202,7 @@ public class VolunteerTests
 
         for (int i = 0; i < pets.Count; i++)
         {
-            volunteer.OwnedPets[i].SerialNumber.Value.Should().Be(i + 1);
+            volunteer.OwnedPets[i].Position.Value.Should().Be(i + 1);
         }
     }
 
@@ -259,7 +259,7 @@ public class VolunteerTests
         var petToMove2 = volunteer.OwnedPets[1];
 
         // Act
-        var result = volunteer.MovePet(petToMove1.SerialNumber, petToMove2.SerialNumber);
+        var result = volunteer.MovePet(petToMove1.Position, petToMove2.Position);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -272,7 +272,7 @@ public class VolunteerTests
 
         for (int i = 0; i < pets.Count; i++)
         {
-            volunteer.OwnedPets[i].SerialNumber.Value.Should().Be(i + 1);
+            volunteer.OwnedPets[i].Position.Value.Should().Be(i + 1);
         }
     }
 
@@ -326,11 +326,11 @@ public class VolunteerTests
             volunteer.AddPet(p);
 
         var petToMove = volunteer.OwnedPets[0];
-        var incorrectSerialNumber = SerialNumber.Create(pets.Count + 1).Value;
+        var incorrectPosition = Position.Create(pets.Count + 1).Value;
 
         // Act
-        var incorrectTargetResult = volunteer.MovePet(petToMove.SerialNumber, incorrectSerialNumber);
-        var incorrectCurrentResult = volunteer.MovePet(incorrectSerialNumber, petToMove.SerialNumber);
+        var incorrectTargetResult = volunteer.MovePet(petToMove.Position, incorrectPosition);
+        var incorrectCurrentResult = volunteer.MovePet(incorrectPosition, petToMove.Position);
 
         // Assert
         incorrectTargetResult.IsFailure.Should().BeTrue();
