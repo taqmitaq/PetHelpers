@@ -28,6 +28,10 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
 
+        builder.Navigation(p => p.Volunteer)
+            .AutoInclude()
+            .IsRequired();
+
         builder.Property(p => p.Weight)
             .IsRequired();
 
@@ -117,11 +121,11 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .HasColumnName("help_status");
         });
 
-        builder.ComplexProperty(p => p.SerialNumber, b =>
+        builder.ComplexProperty(p => p.Position, b =>
         {
             b.IsRequired();
             b.Property(s => s.Value)
-                .HasColumnName("serial_number");
+                .HasColumnName("position");
         });
 
         builder.ComplexProperty(p => p.Location, b =>
@@ -137,5 +141,21 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .HasColumnName("postal_code")
                 .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH);
         });
+
+        builder.Property(p => p.Photos)
+            .HasConversion(
+                photos => JsonSerializer.Serialize(
+                    photos.Select(
+                        p => new PhotoDto(p.PathToStorage)),
+                    JsonSerializerOptions.Default),
+                json => JsonSerializer.Deserialize<List<PhotoDto>>(json, JsonSerializerOptions.Default)!
+                    .Select(dto => Photo.Create(dto.PathToStorage).Value)
+                    .ToList(),
+                new ValueComparer<IReadOnlyList<Photo>>(
+                    (c1, c2) => c1!.SequenceEqual(c2!),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
+                    c => c.ToList()))
+            .HasColumnType("jsonb")
+            .HasColumnName("photos");
     }
 }

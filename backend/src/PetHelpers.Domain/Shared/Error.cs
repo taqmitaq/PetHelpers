@@ -4,11 +4,12 @@ public class Error
 {
     public const string SEPARATOR = "|";
 
-    private Error(string code, string message, ErrorType type)
+    private Error(string code, string message, ErrorType type, string? invalidField = null)
     {
         Code = code;
         Message = message;
         Type = type;
+        InvalidField = invalidField;
     }
 
     public string Code { get; }
@@ -17,8 +18,12 @@ public class Error
 
     public ErrorType Type { get; }
 
-    public static Error Validation(string code, string message) =>
-        new(code, message, ErrorType.Validation);
+    public string? InvalidField { get; }
+
+    public ErrorList ToErrorList() => new([this]);
+
+    public static Error Validation(string code, string message, string? invalidField = null) =>
+        new(code, message, ErrorType.Validation, invalidField);
 
     public static Error NotFound(string code, string message) =>
         new(code, message, ErrorType.NotFound);

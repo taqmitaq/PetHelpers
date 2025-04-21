@@ -7,6 +7,8 @@ namespace PetHelpers.Domain.Volunteer.Entities;
 
 public sealed class Pet : Entity<PetId>
 {
+    private readonly List<Photo> _photos = [];
+
     private readonly List<Requisite> _requisites = [];
 
     private bool _isDeleted = false;
@@ -42,11 +44,13 @@ public sealed class Pet : Entity<PetId>
 
     public Status HelpStatus { get; private set; }
 
-    public SerialNumber SerialNumber { get; private set; }
+    public Position Position { get; private set; }
 
     public SpeciesAndBreed SpeciesAndBreed { get; private set; }
 
     public PhoneNumber OwnersPhoneNumber { get; private set; }
+
+    public IReadOnlyList<Photo> Photos => _photos;
 
     public IReadOnlyList<Requisite> Requisites => _requisites;
 
@@ -96,6 +100,12 @@ public sealed class Pet : Entity<PetId>
 
     public void Restore() => _isDeleted = false;
 
-    public void SetSerialNumber(SerialNumber serialNumber)
-        => SerialNumber = serialNumber;
+    public void SetPosition(Position position)
+        => Position = position;
+
+    public void AddPhoto(Photo photo) =>
+            _photos.Add(photo);
+
+    public void DeletePhoto(Photo photo) =>
+        _photos.Remove(photo);
 }

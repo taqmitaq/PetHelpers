@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -31,6 +32,7 @@ public static class EFCorePropertyExtensions
             new ValueComparer<IReadOnlyList<TValueObject>>(
                 (c1, c2) => c1!.SequenceEqual(c2!),
                 c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
-                c => c.ToList()));
+                c => c.ToList()))
+            .HasColumnType("jsonb");
     }
 }

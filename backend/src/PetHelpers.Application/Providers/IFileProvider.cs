@@ -6,12 +6,14 @@ namespace PetHelpers.Application.Providers;
 
 public interface IFileProvider
 {
-    public Task<Result<string, Error>> Upload(
-        FileData fileData, CancellationToken cancellationToken);
+    Task<Result<IReadOnlyList<FilePath>, Error>> UploadFiles(
+        IEnumerable<FileData> filesData,
+        CancellationToken cancellationToken = default);
 
-    public Task<Result<string, Error>> Get(
+    Task<Result<string, Error>> Get(
         FileDto dto, CancellationToken cancellationToken);
 
-    public Task<UnitResult<Error>> Delete(
-        FileDto dto, CancellationToken cancellationToken);
+    Task<Result<IReadOnlyList<FilePath>, ErrorList>> DeleteFiles(
+        IEnumerable<FileDto> fileDtos,
+        CancellationToken cancellationToken);
 }

@@ -57,15 +57,14 @@ public class VolunteerTests
 
         result.IsSuccess.Should().BeTrue();
         addedPetResult.IsSuccess.Should().BeTrue();
-        addedPetResult.Value.SerialNumber.Should().Be(SerialNumber.First);
+        addedPetResult.Value.Position.Should().Be(Position.First);
     }
 
-    [Fact]
-    public void AddPet_WithExistingPets_ReturnsSuccessfulResult()
+    [Theory]
+    [InlineData(5)]
+    public void AddPet_WithExistingPets_ReturnsSuccessfulResult(int petsCount)
     {
         // Arrange
-        const int petsCount = 5;
-
         var yearsOfExperience = 0;
         var description = Description.Create("test").Value;
         var email = Email.Create("test@test.com").Value;
@@ -129,19 +128,20 @@ public class VolunteerTests
 
         // Assert
         var addedPetResult = volunteer.GetPetById(petToAdd.Id);
-        var serialNumber = SerialNumber.Create(petsCount + 1).Value;
+        var position = Position.Create(petsCount + 1).Value;
 
         result.IsSuccess.Should().BeTrue();
         addedPetResult.IsSuccess.Should().BeTrue();
-        addedPetResult.Value.SerialNumber.Should().Be(serialNumber);
+        addedPetResult.Value.Position.Should().Be(position);
     }
 
-    [Fact]
-    public void MovePet_Right_ReturnsCorrectResults()
+    [Theory]
+    [InlineData(1, 7, 10)]
+    [InlineData(0, 9, 10)]
+    [InlineData(0, 1, 2)]
+    public void MovePet_Right_ReturnsCorrectResults(int petToMoveId, int targetPetId, int petsCount)
     {
         // Arrange
-        const int petsCount = 10;
-
         var yearsOfExperience = 0;
         var description = Description.Create("test").Value;
         var email = Email.Create("test@test.com").Value;
@@ -185,33 +185,34 @@ public class VolunteerTests
         foreach (var p in pets)
             volunteer.AddPet(p);
 
-        var petToMove1 = volunteer.OwnedPets[1];
-        var petToMove2 = volunteer.OwnedPets[7];
+        var petToMove = volunteer.OwnedPets[petToMoveId];
+        var targetPet = volunteer.OwnedPets[targetPetId];
 
         // Act
-        var result = volunteer.MovePet(petToMove1.SerialNumber, petToMove2.SerialNumber);
+        var result = volunteer.MovePet(petToMove.Position, targetPet.Position);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        volunteer.OwnedPets[7].Should().Be(pets[1]);
+        volunteer.OwnedPets[targetPetId].Should().Be(pets[petToMoveId]);
 
-        for (int i = 1; i < 7; i++)
+        for (int i = petToMoveId; i < targetPetId; i++)
         {
             volunteer.OwnedPets[i].Should().Be(pets[i + 1]);
         }
 
         for (int i = 0; i < pets.Count; i++)
         {
-            volunteer.OwnedPets[i].SerialNumber.Value.Should().Be(i + 1);
+            volunteer.OwnedPets[i].Position.Value.Should().Be(i + 1);
         }
     }
 
-    [Fact]
-    public void MovePet_Left_ReturnsCorrectResults()
+    [Theory]
+    [InlineData(7, 1, 10)]
+    [InlineData(9, 0, 10)]
+    [InlineData(1, 0, 2)]
+    public void MovePet_Left_ReturnsCorrectResults(int petToMoveId, int targetPetId, int petsCount)
     {
         // Arrange
-        const int petsCount = 10;
-
         var yearsOfExperience = 0;
         var description = Description.Create("test").Value;
         var email = Email.Create("test@test.com").Value;
@@ -255,33 +256,32 @@ public class VolunteerTests
         foreach (var p in pets)
             volunteer.AddPet(p);
 
-        var petToMove1 = volunteer.OwnedPets[7];
-        var petToMove2 = volunteer.OwnedPets[1];
+        var petToMove = volunteer.OwnedPets[petToMoveId];
+        var targetPet = volunteer.OwnedPets[targetPetId];
 
         // Act
-        var result = volunteer.MovePet(petToMove1.SerialNumber, petToMove2.SerialNumber);
+        var result = volunteer.MovePet(petToMove.Position, targetPet.Position);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        volunteer.OwnedPets[1].Should().Be(pets[7]);
+        volunteer.OwnedPets[targetPetId].Should().Be(pets[petToMoveId]);
 
-        for (int i = 2; i <= 7; i++)
+        for (int i = targetPetId + 1; i <= petToMoveId; i++)
         {
             volunteer.OwnedPets[i].Should().Be(pets[i - 1]);
         }
 
         for (int i = 0; i < pets.Count; i++)
         {
-            volunteer.OwnedPets[i].SerialNumber.Value.Should().Be(i + 1);
+            volunteer.OwnedPets[i].Position.Value.Should().Be(i + 1);
         }
     }
 
-    [Fact]
-    public void MovePet_WithIncorrectInput_ReturnsErrorResult()
+    [Theory]
+    [InlineData(10)]
+    public void MovePet_WithIncorrectInput_ReturnsErrorResult(int petsCount)
     {
         // Arrange
-        const int petsCount = 10;
-
         var yearsOfExperience = 0;
         var description = Description.Create("test").Value;
         var email = Email.Create("test@test.com").Value;
@@ -326,11 +326,11 @@ public class VolunteerTests
             volunteer.AddPet(p);
 
         var petToMove = volunteer.OwnedPets[0];
-        var incorrectSerialNumber = SerialNumber.Create(pets.Count + 1).Value;
+        var incorrectPosition = Position.Create(pets.Count + 1).Value;
 
         // Act
-        var incorrectTargetResult = volunteer.MovePet(petToMove.SerialNumber, incorrectSerialNumber);
-        var incorrectCurrentResult = volunteer.MovePet(incorrectSerialNumber, petToMove.SerialNumber);
+        var incorrectTargetResult = volunteer.MovePet(petToMove.Position, incorrectPosition);
+        var incorrectCurrentResult = volunteer.MovePet(incorrectPosition, petToMove.Position);
 
         // Assert
         incorrectTargetResult.IsFailure.Should().BeTrue();
