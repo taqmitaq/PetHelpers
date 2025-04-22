@@ -39,7 +39,7 @@ public class DeletePetPhotosHandler
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
         if (validationResult.IsValid == false)
-            return validationResult.ToList();
+            return validationResult.ToErrorList();
 
         var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
 

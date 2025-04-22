@@ -32,7 +32,7 @@ public class CreateSpeciesHandler
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
         if (validationResult.IsValid == false)
-            return validationResult.ToList();
+            return validationResult.ToErrorList();
 
         var title = Title.Create(command.Title).Value;
 

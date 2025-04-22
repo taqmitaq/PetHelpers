@@ -1,13 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using PetHelpers.Application.Files.Delete;
-using PetHelpers.Application.Files.Get;
-using PetHelpers.Application.Files.Upload;
 using PetHelpers.Application.Species.Create;
 using PetHelpers.Application.Species.Delete;
 using PetHelpers.Application.Species.Update;
 using PetHelpers.Application.Volunteers.AddPet;
 using PetHelpers.Application.Volunteers.AddPetPhotos;
+using PetHelpers.Application.Volunteers.ChangePetPosition;
 using PetHelpers.Application.Volunteers.Create;
 using PetHelpers.Application.Volunteers.Delete;
 using PetHelpers.Application.Volunteers.DeletePetPhotos;
@@ -33,13 +31,10 @@ public static class Inject
         services.AddScoped<UpdateVolunteerRequisitesHandler>();
         services.AddScoped<UpdateVolunteerSocialMediasHandler>();
 
-        services.AddScoped<DeleteFileHandler>();
-        services.AddScoped<GetFileHandler>();
-        services.AddScoped<UploadFileHandler>();
-
         services.AddScoped<AddPetHandler>();
         services.AddScoped<AddPetPhotosHandler>();
         services.AddScoped<DeletePetPhotosHandler>();
+        services.AddScoped<ChangePetPositionHandler>();
 
         services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
 

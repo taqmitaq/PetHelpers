@@ -5,20 +5,20 @@ using PetHelpers.Application.Extensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.UpdateRequisites;
+namespace PetHelpers.Application.Volunteers.ChangePetPosition;
 
-public class UpdateVolunteerRequisitesHandler
+public class ChangePetPositionHandler
 {
     private readonly IVolunteerRepository _repository;
-    private readonly ILogger<UpdateVolunteerRequisitesHandler> _logger;
+    private readonly ILogger<ChangePetPositionHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly UpdateVolunteerRequisitesCommandValidator _validator;
+    private readonly ChangePetPositionCommandValidator _validator;
 
-    public UpdateVolunteerRequisitesHandler(
+    public ChangePetPositionHandler(
         IVolunteerRepository repository,
-        ILogger<UpdateVolunteerRequisitesHandler> logger,
+        ILogger<ChangePetPositionHandler> logger,
         IUnitOfWork unitOfWork,
-        UpdateVolunteerRequisitesCommandValidator validator)
+        ChangePetPositionCommandValidator validator)
     {
         _repository = repository;
         _logger = logger;
@@ -26,8 +26,8 @@ public class UpdateVolunteerRequisitesHandler
         _validator = validator;
     }
 
-    public async Task<Result<Guid, ErrorList>> Handle(
-        UpdateVolunteerRequisitesCommand command,
+    public async Task<UnitResult<ErrorList>> Handle(
+        ChangePetPositionCommand command,
         CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
@@ -41,24 +41,23 @@ public class UpdateVolunteerRequisitesHandler
             return volunteerResult.Error.ToErrorList();
 
         var volunteer = volunteerResult.Value;
+        var currentPosition = Position.Create(command.CurrentPosition).Value;
+        var targetPosition = Position.Create(command.TargetPosition).Value;
 
-        var requisites = new List<Requisite>();
+        var result = volunteer.MovePet(currentPosition, targetPosition);
 
-        foreach (var dto in command.Requisites)
+        if (result.IsFailure)
         {
-            var title = Title.Create(dto.Title).Value;
-
-            var description = Description.Create(dto.Description).Value;
-
-            requisites.Add(new Requisite(title, description));
+            return result.Error.ToErrorList();
         }
-
-        volunteer.UpdateRequisites(requisites);
 
         await _unitOfWork.SaveChanges(cancellationToken);
 
-        _logger.LogInformation("Updated requisites for volunteer with Id: {volunteer.Id}", volunteer.Id.Value);
+        _logger.LogInformation(
+            "Pet moved from position {currentPosition} to position {targetPosition}",
+            currentPosition.Value,
+            targetPosition.Value);
 
-        return volunteer.Id.Value;
+        return UnitResult.Success<ErrorList>();
     }
 }
