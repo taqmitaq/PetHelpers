@@ -155,6 +155,8 @@ public sealed class Volunteer : Entity<VolunteerId>
 
     public UnitResult<Error> MovePet(Position currentPosition, Position targetPosition)
     {
+        _ownedPets.Sort((x, y) => x.Position.CompareTo(y.Position));
+
         int currentIndex = currentPosition.Value - 1;
         int targetIndex = targetPosition.Value - 1;
 

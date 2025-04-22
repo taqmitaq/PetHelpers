@@ -5,6 +5,7 @@ using PetHelpers.API.Processors;
 using PetHelpers.API.Response;
 using PetHelpers.Application.Volunteers.AddPet;
 using PetHelpers.Application.Volunteers.AddPetPhotos;
+using PetHelpers.Application.Volunteers.ChangePetPosition;
 using PetHelpers.Application.Volunteers.Create;
 using PetHelpers.Application.Volunteers.Delete;
 using PetHelpers.Application.Volunteers.DeletePetPhotos;
@@ -120,6 +121,21 @@ public class VolunteerController : ApplicationController
             return result.Error.ToResponse();
 
         return Ok(Envelope.Success(result.Value));
+    }
+
+    [HttpPut("{id:guid}/pet/positions")]
+    public async Task<ActionResult<Guid>> ChangePetPosition(
+        [FromRoute] Guid id,
+        [FromBody] ChangePetPositionRequest request,
+        [FromServices] ChangePetPositionHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Handle(request.ToCommand(id), cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(Envelope.Success());
     }
 
     [HttpPost("pet/{id:guid}/photo")]
