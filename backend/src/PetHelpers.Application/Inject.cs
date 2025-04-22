@@ -34,7 +34,6 @@ public static class Inject
         services.AddScoped<AddPetHandler>();
         services.AddScoped<AddPetPhotosHandler>();
         services.AddScoped<DeletePetPhotosHandler>();
-
         services.AddScoped<ChangePetPositionHandler>();
 
         services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
