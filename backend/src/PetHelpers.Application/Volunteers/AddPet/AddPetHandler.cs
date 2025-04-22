@@ -38,7 +38,7 @@ public class AddPetHandler
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
         if (validationResult.IsValid == false)
-            return validationResult.ToList();
+            return validationResult.ToErrorList();
 
         var speciesResult = await _speciesRepository.GetById(command.SpeciesId, cancellationToken);
 

@@ -34,7 +34,7 @@ public class CreateVolunteerHandler
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
         if (validationResult.IsValid == false)
-            return validationResult.ToList();
+            return validationResult.ToErrorList();
 
         var description = Description.Create(command.Description).Value;
 
