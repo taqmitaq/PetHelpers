@@ -1,8 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using PetHelpers.Application.Dtos;
 using PetHelpers.Domain.Shared;
 
-namespace PetHelpers.Application.Providers;
+namespace PetHelpers.Application.Files;
 
 public interface IFileProvider
 {
@@ -11,9 +10,9 @@ public interface IFileProvider
         CancellationToken cancellationToken = default);
 
     Task<Result<string, Error>> Get(
-        FileDto dto, CancellationToken cancellationToken);
+        FileInfo info, CancellationToken cancellationToken);
 
     Task<Result<IReadOnlyList<FilePath>, ErrorList>> DeleteFiles(
-        IEnumerable<FileDto> fileDtos,
+        IEnumerable<FileInfo> fileInfos,
         CancellationToken cancellationToken);
 }

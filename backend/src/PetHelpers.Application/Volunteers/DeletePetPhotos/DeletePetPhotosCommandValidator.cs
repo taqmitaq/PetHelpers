@@ -21,7 +21,7 @@ public class PhotoDtoValidator : AbstractValidator<PhotoDto>
     public PhotoDtoValidator()
     {
         RuleFor(f => f.PathToStorage)
-            .NotEmpty()
+            .MustBeValueObject(FilePath.Create)
             .WithError(Errors.General.ValueIsInvalid("PathToStorage"));
     }
 }

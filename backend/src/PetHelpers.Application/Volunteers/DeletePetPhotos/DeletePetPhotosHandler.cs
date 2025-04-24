@@ -1,10 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetHelpers.Application.Database;
-using PetHelpers.Application.Dtos;
 using PetHelpers.Application.Extensions;
-using PetHelpers.Application.Providers;
+using PetHelpers.Application.Files;
 using PetHelpers.Domain.Shared;
+using FileInfo = PetHelpers.Application.Files.FileInfo;
 
 namespace PetHelpers.Application.Volunteers.DeletePetPhotos;
 
@@ -54,10 +54,10 @@ public class DeletePetPhotosHandler
 
             var pet = petResult.Value;
 
-            var fileDtos = command.PhotoDtos
-                .Select(p => new FileDto(BUCKET_NAME, p.PathToStorage));
+            var fileInfos = command.PhotoDtos
+                .Select(p => new FileInfo(FilePath.Create(p.PathToStorage).Value, BUCKET_NAME));
 
-            var deleteResult = await _provider.DeleteFiles(fileDtos, cancellationToken);
+            var deleteResult = await _provider.DeleteFiles(fileInfos, cancellationToken);
 
             if (deleteResult.IsFailure)
             {
