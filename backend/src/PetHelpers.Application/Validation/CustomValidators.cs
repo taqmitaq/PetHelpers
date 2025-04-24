@@ -26,4 +26,10 @@ public static class CustomValidators
     {
         return ruleBuilder.WithMessage(error.Serialize());
     }
+
+    public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(
+        this IRuleBuilderOptionsConditions<T, TProperty> ruleBuilder, Error error)
+    {
+        return ruleBuilder.WithError(error);
+    }
 }

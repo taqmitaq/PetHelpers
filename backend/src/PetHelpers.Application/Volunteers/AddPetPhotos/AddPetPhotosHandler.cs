@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetHelpers.Application.Database;
-using PetHelpers.Application.Dtos;
 using PetHelpers.Application.Extensions;
-using PetHelpers.Application.Providers;
+using PetHelpers.Application.Files;
+using PetHelpers.Application.Messaging;
 using PetHelpers.Domain.Shared;
+using FileInfo = PetHelpers.Application.Files.FileInfo;
 
 namespace PetHelpers.Application.Volunteers.AddPetPhotos;
 
@@ -16,6 +17,7 @@ public class AddPetPhotosHandler
     private readonly IFileProvider _provider;
     private readonly ILogger<AddPetPhotosHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
     private readonly AddPetPhotosCommandValidator _validator;
 
     public AddPetPhotosHandler(
@@ -23,13 +25,15 @@ public class AddPetPhotosHandler
         IFileProvider provider,
         ILogger<AddPetPhotosHandler> logger,
         IUnitOfWork unitOfWork,
-        AddPetPhotosCommandValidator validator)
+        AddPetPhotosCommandValidator validator,
+        IMessageQueue<IEnumerable<FileInfo>> messageQueue)
     {
         _volunteerRepository = volunteerRepository;
         _provider = provider;
         _logger = logger;
         _unitOfWork = unitOfWork;
         _validator = validator;
+        _messageQueue = messageQueue;
     }
 
     public async Task<Result<IReadOnlyList<FilePath>, ErrorList>> Handle(
@@ -64,7 +68,7 @@ public class AddPetPhotosHandler
                 if (filePath.IsFailure)
                     return filePath.Error.ToErrorList();
 
-                var fileData = new FileData(file.Content, filePath.Value, BUCKET_NAME);
+                var fileData = new FileData(file.Content, new FileInfo(filePath.Value, BUCKET_NAME));
 
                 files.Add(fileData);
             }
@@ -73,6 +77,10 @@ public class AddPetPhotosHandler
 
             if (uploadResult.IsFailure)
             {
+                await _messageQueue.WriteAsync(
+                    files.Select(f => f.Info),
+                    cancellationToken);
+
                 return uploadResult.Error.ToErrorList();
             }
 
