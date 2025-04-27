@@ -21,7 +21,7 @@ public static class Inject
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<ApplicationDbContext>();
+        services.AddScoped<WriteDbContext>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
         services.AddScoped<IVolunteerRepository, VolunteerRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();

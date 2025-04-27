@@ -6,7 +6,7 @@ using PetHelpers.Domain.Volunteer;
 
 namespace PetHelpers.Infrastructure;
 
-public class ApplicationDbContext(IConfiguration configuration) : DbContext
+public class WriteDbContext(IConfiguration configuration) : DbContext
 {
     private const string DATABASE = "Database";
 
@@ -23,7 +23,7 @@ public class ApplicationDbContext(IConfiguration configuration) : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(WriteDbContext).Assembly);
     }
 
     private static ILoggerFactory CreateLoggerFactory() =>

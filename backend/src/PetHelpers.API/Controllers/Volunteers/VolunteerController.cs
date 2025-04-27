@@ -17,6 +17,17 @@ namespace PetHelpers.API.Controllers.Volunteers;
 
 public class VolunteerController : ApplicationController
 {
+    [HttpGet]
+    public async Task<ActionResult> Get(
+        [FromServices] GetVolunteersWithPaginationHandler,
+        [FromQuery] GetVolunteersWithPaginationRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await handler.Handle(request.ToQuery(), cancellationToken);
+
+        return Ok(response);
+    }
+
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
         [FromServices] CreateVolunteerHandler handler,
@@ -28,7 +39,7 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpPut("{id:guid}/main-info")]
@@ -43,7 +54,7 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpPut("{id:guid}/requisites")]
@@ -58,7 +69,7 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpPut("{id:guid}/social-medias")]
@@ -73,7 +84,7 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}/hard")]
@@ -89,7 +100,7 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}")]
@@ -105,7 +116,7 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpPost("{id:guid}/pet")]
@@ -120,7 +131,7 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpPut("{id:guid}/pet/positions")]
@@ -156,7 +167,7 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpDelete("pet/{id:guid}/photo")]
@@ -171,6 +182,6 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 }

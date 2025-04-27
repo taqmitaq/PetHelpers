@@ -10,9 +10,9 @@ namespace PetHelpers.Infrastructure.Repositories;
 
 public class VolunteerRepository : IVolunteerRepository
 {
-    public ApplicationDbContext _dbContext { get; }
+    public WriteDbContext _dbContext { get; }
 
-    public VolunteerRepository(ApplicationDbContext dbContext)
+    public VolunteerRepository(WriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

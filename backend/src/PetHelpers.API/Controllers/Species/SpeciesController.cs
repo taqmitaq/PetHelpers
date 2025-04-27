@@ -21,7 +21,7 @@ public class SpeciesController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpPut("{id:guid}")]
@@ -36,7 +36,7 @@ public class SpeciesController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}/hard")]
@@ -52,7 +52,7 @@ public class SpeciesController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}")]
@@ -68,6 +68,6 @@ public class SpeciesController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Success(result.Value));
+        return Ok(result.Value);
     }
 }
