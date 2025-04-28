@@ -1,6 +1,7 @@
-﻿using PetHelpers.Application.Dtos;
+﻿using PetHelpers.Application.Abstractions;
+using PetHelpers.Application.Dtos;
 
-namespace PetHelpers.Application.Volunteers.AddPet;
+namespace PetHelpers.Application.Volunteers.Commands.AddPet;
 
 public record AddPetCommand(
     Guid VolunteerId,
@@ -17,4 +18,4 @@ public record AddPetCommand(
     string HelpStatus,
     Guid SpeciesId,
     Guid BreedId,
-    string OwnersPhoneNumber);
+    string OwnersPhoneNumber) : ICommand;

@@ -1,6 +1,7 @@
-﻿using PetHelpers.Application.Dtos;
+﻿using PetHelpers.Application.Abstractions;
+using PetHelpers.Application.Dtos;
 
-namespace PetHelpers.Application.Volunteers.UpdateMainInfo;
+namespace PetHelpers.Application.Volunteers.Commands.UpdateMainInfo;
 
 public record UpdateVolunteerMainInfoCommand(
     Guid VolunteerId,
@@ -8,4 +9,4 @@ public record UpdateVolunteerMainInfoCommand(
     string Description,
     string Email,
     string PhoneNumber,
-    FullNameDto FullName);
+    FullNameDto FullName) : ICommand;

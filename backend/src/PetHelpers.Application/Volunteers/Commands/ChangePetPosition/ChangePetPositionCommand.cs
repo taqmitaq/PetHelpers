@@ -1,3 +1,5 @@
-﻿namespace PetHelpers.Application.Volunteers.ChangePetPosition;
+﻿using PetHelpers.Application.Abstractions;
 
-public record ChangePetPositionCommand(Guid VolunteerId, int CurrentPosition, int TargetPosition);
+namespace PetHelpers.Application.Volunteers.Commands.ChangePetPosition;
+
+public record ChangePetPositionCommand(Guid VolunteerId, int CurrentPosition, int TargetPosition) : ICommand;

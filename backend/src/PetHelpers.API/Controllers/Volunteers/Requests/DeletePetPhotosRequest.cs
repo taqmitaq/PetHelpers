@@ -1,5 +1,5 @@
 ﻿using PetHelpers.Application.Dtos;
-using PetHelpers.Application.Volunteers.DeletePetPhotos;
+using PetHelpers.Application.Volunteers.Commands.DeletePetPhotos;
 
 namespace PetHelpers.API.Controllers.Volunteers.Requests;
 

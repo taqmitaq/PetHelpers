@@ -3,7 +3,7 @@ using PetHelpers.Application.Validation;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.ChangePetPosition;
+namespace PetHelpers.Application.Volunteers.Commands.ChangePetPosition;
 
 public class ChangePetPositionCommandValidator : AbstractValidator<ChangePetPositionCommand>
 {

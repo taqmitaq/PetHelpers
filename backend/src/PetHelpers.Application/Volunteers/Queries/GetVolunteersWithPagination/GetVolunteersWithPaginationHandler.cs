@@ -1,12 +1,18 @@
-﻿namespace PetHelpers.Application.Volunteers.Queries.GetVolunteersWithPagination;
+﻿using PetHelpers.Application.Abstractions;
+using PetHelpers.Application.Dtos;
+using PetHelpers.Application.Models;
+
+namespace PetHelpers.Application.Volunteers.Queries.GetVolunteersWithPagination;
 
 public class GetVolunteersWithPaginationHandler
+    : IQueryHandler<PagedList<VolunteerDto>, GetFilteredVolunteersWithPaginationQuery>
 {
-    jfgfj
+    public Task<PagedList<VolunteerDto>> Handle(
+        GetFilteredVolunteersWithPaginationQuery query,
+        CancellationToken cancellationToken)
+    {
+        // TODO: сделать получение волонтеров с пагинацией и фильтрацией через Dapper
+        // TODO: все, что не должно быть доступно в других сборках сделать internal, вместо public / пофиксить модификаторы доступа
+    }
 }
 
-// TODO: доделать тот метод для конфигураций
-
-// TODO: сделать получение волонтеров с пагинацией
-
-// TODO: отрефакторить inject

@@ -1,14 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Abstractions;
 using PetHelpers.Application.Database;
 using PetHelpers.Application.Extensions;
 using PetHelpers.Application.Files;
 using PetHelpers.Domain.Shared;
 using FileInfo = PetHelpers.Application.Files.FileInfo;
 
-namespace PetHelpers.Application.Volunteers.DeletePetPhotos;
+namespace PetHelpers.Application.Volunteers.Commands.DeletePetPhotos;
 
-public class DeletePetPhotosHandler
+public class DeletePetPhotosHandler : ICommandHandler<IReadOnlyList<FilePath>, DeletePetPhotosCommand>
 {
     private const string BUCKET_NAME = "photos";
 

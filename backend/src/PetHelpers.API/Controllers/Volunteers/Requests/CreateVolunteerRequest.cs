@@ -1,5 +1,5 @@
 ﻿using PetHelpers.Application.Dtos;
-using PetHelpers.Application.Volunteers.Create;
+using PetHelpers.Application.Volunteers.Commands.Create;
 
 namespace PetHelpers.API.Controllers.Volunteers.Requests;
 

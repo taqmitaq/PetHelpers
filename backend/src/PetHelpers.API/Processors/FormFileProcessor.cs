@@ -1,4 +1,4 @@
-﻿using PetHelpers.Application.Volunteers.AddPetPhotos;
+﻿using PetHelpers.Application.Files;
 
 namespace PetHelpers.API.Processors;
 

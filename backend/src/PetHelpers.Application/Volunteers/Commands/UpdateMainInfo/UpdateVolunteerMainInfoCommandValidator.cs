@@ -3,7 +3,7 @@ using PetHelpers.Application.Validation;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.UpdateMainInfo;
+namespace PetHelpers.Application.Volunteers.Commands.UpdateMainInfo;
 
 public class UpdateVolunteerMainInfoCommandValidator : AbstractValidator<UpdateVolunteerMainInfoCommand>
 {

@@ -1,5 +1,6 @@
-﻿using PetHelpers.Application.Dtos;
+﻿using PetHelpers.Application.Abstractions;
+using PetHelpers.Application.Dtos;
 
-namespace PetHelpers.Application.Volunteers.DeletePetPhotos;
+namespace PetHelpers.Application.Volunteers.Commands.DeletePetPhotos;
 
-public record DeletePetPhotosCommand(Guid PetId, IEnumerable<PhotoDto> PhotoDtos);
+public record DeletePetPhotosCommand(Guid PetId, IEnumerable<PhotoDto> PhotoDtos) : ICommand;

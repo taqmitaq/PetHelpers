@@ -1,4 +1,4 @@
-﻿using PetHelpers.Application.Species.Update;
+﻿using PetHelpers.Application.Species.Commands.Update;
 
 namespace PetHelpers.API.Controllers.Species.Requests;
 

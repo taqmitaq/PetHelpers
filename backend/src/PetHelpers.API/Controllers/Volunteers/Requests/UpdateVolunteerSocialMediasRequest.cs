@@ -1,5 +1,5 @@
 ﻿using PetHelpers.Application.Dtos;
-using PetHelpers.Application.Volunteers.UpdateSocialMedias;
+using PetHelpers.Application.Volunteers.Commands.UpdateSocialMedias;
 
 namespace PetHelpers.API.Controllers.Volunteers.Requests;
 

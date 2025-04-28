@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Abstractions;
 using PetHelpers.Application.Database;
 using PetHelpers.Application.Extensions;
 using PetHelpers.Application.Species;
@@ -7,9 +8,9 @@ using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.Entities;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.AddPet;
+namespace PetHelpers.Application.Volunteers.Commands.AddPet;
 
-public class AddPetHandler
+public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
 {
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly ISpeciesRepository _speciesRepository;

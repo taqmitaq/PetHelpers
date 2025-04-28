@@ -3,7 +3,7 @@ using PetHelpers.Application.Dtos;
 using PetHelpers.Application.Validation;
 using PetHelpers.Domain.Shared;
 
-namespace PetHelpers.Application.Volunteers.DeletePetPhotos;
+namespace PetHelpers.Application.Volunteers.Commands.DeletePetPhotos;
 
 public class DeletePetPhotosCommandValidator : AbstractValidator<DeletePetPhotosCommand>
 {

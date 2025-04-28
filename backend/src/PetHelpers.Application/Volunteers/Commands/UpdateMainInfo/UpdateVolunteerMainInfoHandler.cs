@@ -1,13 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Abstractions;
 using PetHelpers.Application.Database;
 using PetHelpers.Application.Extensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.UpdateMainInfo;
+namespace PetHelpers.Application.Volunteers.Commands.UpdateMainInfo;
 
-public class UpdateVolunteerMainInfoHandler
+public class UpdateVolunteerMainInfoHandler : ICommandHandler<Guid, UpdateVolunteerMainInfoCommand>
 {
     private readonly IVolunteerRepository _repository;
     private readonly ILogger<UpdateVolunteerMainInfoHandler> _logger;

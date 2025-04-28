@@ -1,5 +1,6 @@
-﻿using PetHelpers.Application.Dtos;
+﻿using PetHelpers.Application.Abstractions;
+using PetHelpers.Application.Dtos;
 
-namespace PetHelpers.Application.Volunteers.UpdateRequisites;
+namespace PetHelpers.Application.Volunteers.Commands.UpdateRequisites;
 
-public record UpdateVolunteerRequisitesCommand(Guid VolunteerId, IEnumerable<RequisiteDto> Requisites);
+public record UpdateVolunteerRequisitesCommand(Guid VolunteerId, IEnumerable<RequisiteDto> Requisites) : ICommand;

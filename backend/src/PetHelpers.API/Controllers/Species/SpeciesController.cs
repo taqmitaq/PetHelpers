@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetHelpers.API.Controllers.Species.Requests;
 using PetHelpers.API.Extensions;
-using PetHelpers.API.Response;
-using PetHelpers.Application.Species.Create;
-using PetHelpers.Application.Species.Delete;
-using PetHelpers.Application.Species.Update;
+using PetHelpers.Application.Species.Commands.Create;
+using PetHelpers.Application.Species.Commands.Delete;
+using PetHelpers.Application.Species.Commands.Update;
 
 namespace PetHelpers.API.Controllers.Species;
 

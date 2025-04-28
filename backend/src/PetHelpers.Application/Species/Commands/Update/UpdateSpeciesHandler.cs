@@ -1,23 +1,24 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Abstractions;
 using PetHelpers.Application.Database;
 using PetHelpers.Application.Extensions;
 using PetHelpers.Domain.Shared;
 
-namespace PetHelpers.Application.Species.Delete;
+namespace PetHelpers.Application.Species.Commands.Update;
 
-public class HardDeleteSpeciesHandler
+public class UpdateSpeciesHandler : ICommandHandler<Guid, UpdateSpeciesCommand>
 {
     private readonly ISpeciesRepository _repository;
-    private readonly ILogger<HardDeleteSpeciesHandler> _logger;
+    private readonly ILogger<UpdateSpeciesHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly DeleteSpeciesCommandValidator _validator;
+    private readonly UpdateSpeciesCommandValidator _validator;
 
-    public HardDeleteSpeciesHandler(
+    public UpdateSpeciesHandler(
         ISpeciesRepository repository,
-        ILogger<HardDeleteSpeciesHandler> logger,
+        ILogger<UpdateSpeciesHandler> logger,
         IUnitOfWork unitOfWork,
-        DeleteSpeciesCommandValidator validator)
+        UpdateSpeciesCommandValidator validator)
     {
         _repository = repository;
         _logger = logger;
@@ -26,7 +27,7 @@ public class HardDeleteSpeciesHandler
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
-        DeleteSpeciesCommand command,
+        UpdateSpeciesCommand command,
         CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
@@ -34,19 +35,19 @@ public class HardDeleteSpeciesHandler
         if (validationResult.IsValid == false)
             return validationResult.ToErrorList();
 
-        var speciesResult = await _repository.GetById(command.SpeciesId, cancellationToken);
+        var speciesResult = await _repository.GetById(command.Id, cancellationToken);
 
         if (speciesResult.IsFailure)
             return speciesResult.Error.ToErrorList();
 
         var species = speciesResult.Value;
 
-        var result = _repository.Delete(species, cancellationToken);
+        species.UpdateTitle(command.Title);
 
         await _unitOfWork.SaveChanges(cancellationToken);
 
-        _logger.LogInformation("Deleted species with id: {speciesId}", result);
+        _logger.LogInformation("Updated species with Id: {speciesId}", species.Id.Value);
 
-        return result;
+        return species.Id.Value;
     }
 }

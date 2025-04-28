@@ -3,7 +3,7 @@ using PetHelpers.Application.Validation;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.UpdateSocialMedias;
+namespace PetHelpers.Application.Volunteers.Commands.UpdateSocialMedias;
 
 public class UpdateVolunteerSocialMediasCommandValidator : AbstractValidator<UpdateVolunteerSocialMediasCommand>
 {

@@ -1,12 +1,11 @@
-﻿using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHelpers.Application.Dtos;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Shared.Ids;
 using PetHelpers.Domain.Volunteer;
 using PetHelpers.Domain.Volunteer.ValueObjects;
+using PetHelpers.Infrastructure.Extensions;
 
 namespace PetHelpers.Infrastructure.Configurations;
 
@@ -46,35 +45,15 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             .IsRequired();
 
         builder.Property(v => v.Requisites)
-            .HasConversion(
-                requisites => JsonSerializer.Serialize(
-                    requisites.Select(
-                        r => new RequisiteDto(r.Title.Text, r.Description.Text)),
-                    JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<List<RequisiteDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(dto => new Requisite(Title.Create(dto.Title).Value, Description.Create(dto.Description).Value))
-                    .ToList(),
-                new ValueComparer<IReadOnlyList<Requisite>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
-                    c => c.ToList()))
-            .HasColumnType("jsonb")
+            .ValueObjectsCollectionJsonConversion(
+                requisite => new RequisiteDto(requisite.Title, requisite.Description),
+                dto => new Requisite(dto.Title, dto.Description))
             .HasColumnName("requisites");
 
         builder.Property(v => v.SocialMedias)
-            .HasConversion(
-                socialMedias => JsonSerializer.Serialize(
-                    socialMedias.Select(
-                        r => new SocialMediaDto(r.Title.Text, r.Link.Text)),
-                    JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<List<SocialMediaDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(dto => new SocialMedia(Title.Create(dto.Title).Value, Link.Create(dto.Link).Value))
-                    .ToList(),
-                new ValueComparer<IReadOnlyList<SocialMedia>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
-                    c => c.ToList()))
-            .HasColumnType("jsonb")
+            .ValueObjectsCollectionJsonConversion(
+                socialMedia => new SocialMediaDto(socialMedia.Title, socialMedia.Link.Text),
+                dto => new SocialMedia(dto.Title, Link.Create(dto.Link).Value))
             .HasColumnName("social_medias");
 
         builder.ComplexProperty(v => v.FullName, b =>

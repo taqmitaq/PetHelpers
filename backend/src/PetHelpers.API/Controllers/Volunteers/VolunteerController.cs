@@ -3,15 +3,16 @@ using PetHelpers.API.Controllers.Volunteers.Requests;
 using PetHelpers.API.Extensions;
 using PetHelpers.API.Processors;
 using PetHelpers.API.Response;
-using PetHelpers.Application.Volunteers.AddPet;
-using PetHelpers.Application.Volunteers.AddPetPhotos;
-using PetHelpers.Application.Volunteers.ChangePetPosition;
-using PetHelpers.Application.Volunteers.Create;
-using PetHelpers.Application.Volunteers.Delete;
-using PetHelpers.Application.Volunteers.DeletePetPhotos;
-using PetHelpers.Application.Volunteers.UpdateMainInfo;
-using PetHelpers.Application.Volunteers.UpdateRequisites;
-using PetHelpers.Application.Volunteers.UpdateSocialMedias;
+using PetHelpers.Application.Volunteers.Commands.AddPet;
+using PetHelpers.Application.Volunteers.Commands.AddPetPhotos;
+using PetHelpers.Application.Volunteers.Commands.ChangePetPosition;
+using PetHelpers.Application.Volunteers.Commands.Create;
+using PetHelpers.Application.Volunteers.Commands.Delete;
+using PetHelpers.Application.Volunteers.Commands.DeletePetPhotos;
+using PetHelpers.Application.Volunteers.Commands.UpdateMainInfo;
+using PetHelpers.Application.Volunteers.Commands.UpdateRequisites;
+using PetHelpers.Application.Volunteers.Commands.UpdateSocialMedias;
+using PetHelpers.Application.Volunteers.Queries.GetVolunteersWithPagination;
 
 namespace PetHelpers.API.Controllers.Volunteers;
 
@@ -19,7 +20,7 @@ public class VolunteerController : ApplicationController
 {
     [HttpGet]
     public async Task<ActionResult> Get(
-        [FromServices] GetVolunteersWithPaginationHandler,
+        [FromServices] GetVolunteersWithPaginationHandler handler,
         [FromQuery] GetVolunteersWithPaginationRequest request,
         CancellationToken cancellationToken)
     {

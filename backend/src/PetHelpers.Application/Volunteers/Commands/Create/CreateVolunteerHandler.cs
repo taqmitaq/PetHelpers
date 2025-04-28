@@ -1,14 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Abstractions;
 using PetHelpers.Application.Database;
 using PetHelpers.Application.Extensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.Create;
+namespace PetHelpers.Application.Volunteers.Commands.Create;
 
-public class CreateVolunteerHandler
+public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerCommand>
 {
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly ILogger<CreateVolunteerHandler> _logger;

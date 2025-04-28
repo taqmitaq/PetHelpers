@@ -1,12 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Abstractions;
 using PetHelpers.Application.Database;
 using PetHelpers.Application.Extensions;
 using PetHelpers.Domain.Shared;
 
-namespace PetHelpers.Application.Species.Create;
+namespace PetHelpers.Application.Species.Commands.Create;
 
-public class CreateSpeciesHandler
+public class CreateSpeciesHandler : ICommandHandler<Guid, CreateSpeciesCommand>
 {
     private readonly ISpeciesRepository _repository;
     private readonly ILogger<CreateSpeciesHandler> _logger;

@@ -1,6 +1,7 @@
-﻿using PetHelpers.Application.Dtos;
+﻿using PetHelpers.Application.Abstractions;
+using PetHelpers.Application.Dtos;
 
-namespace PetHelpers.Application.Volunteers.Create;
+namespace PetHelpers.Application.Volunteers.Commands.Create;
 
 public record CreateVolunteerCommand(
     int YearsOfExperience,
@@ -9,4 +10,4 @@ public record CreateVolunteerCommand(
     string PhoneNumber,
     FullNameDto FullName,
     IEnumerable<SocialMediaDto> SocialMedias,
-    IEnumerable<RequisiteDto> Requisites);
+    IEnumerable<RequisiteDto> Requisites) : ICommand;

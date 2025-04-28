@@ -1,3 +1,6 @@
-﻿namespace PetHelpers.Application.Volunteers.AddPetPhotos;
+﻿using PetHelpers.Application.Abstractions;
+using PetHelpers.Application.Files;
 
-public record AddPetPhotosCommand(Guid PetId, IEnumerable<CreateFileCommand> FileCommands);
+namespace PetHelpers.Application.Volunteers.Commands.AddPetPhotos;
+
+public record AddPetPhotosCommand(Guid PetId, IEnumerable<CreateFileCommand> FileCommands) : ICommand;

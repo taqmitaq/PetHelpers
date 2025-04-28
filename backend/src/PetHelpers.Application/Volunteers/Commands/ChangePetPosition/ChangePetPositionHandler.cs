@@ -1,13 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Abstractions;
 using PetHelpers.Application.Database;
 using PetHelpers.Application.Extensions;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.ChangePetPosition;
+namespace PetHelpers.Application.Volunteers.Commands.ChangePetPosition;
 
-public class ChangePetPositionHandler
+public class ChangePetPositionHandler : ICommandHandler<ChangePetPositionCommand>
 {
     private readonly IVolunteerRepository _repository;
     private readonly ILogger<ChangePetPositionHandler> _logger;

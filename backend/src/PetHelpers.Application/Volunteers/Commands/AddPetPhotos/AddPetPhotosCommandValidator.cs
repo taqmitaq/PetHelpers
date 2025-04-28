@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
+using PetHelpers.Application.Files;
 using PetHelpers.Application.Validation;
 using PetHelpers.Domain.Shared;
 
-namespace PetHelpers.Application.Volunteers.AddPetPhotos;
+namespace PetHelpers.Application.Volunteers.Commands.AddPetPhotos;
 
 public class AddPetPhotosCommandValidator : AbstractValidator<AddPetPhotosCommand>
 {

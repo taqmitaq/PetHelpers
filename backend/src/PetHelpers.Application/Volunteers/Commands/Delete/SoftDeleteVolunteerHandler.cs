@@ -1,12 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Abstractions;
 using PetHelpers.Application.Database;
 using PetHelpers.Application.Extensions;
 using PetHelpers.Domain.Shared;
 
-namespace PetHelpers.Application.Volunteers.Delete;
+namespace PetHelpers.Application.Volunteers.Commands.Delete;
 
-public class SoftDeleteVolunteerHandler
+public class SoftDeleteVolunteerHandler : ICommandHandler<Guid, DeleteVolunteerCommand>
 {
     private readonly IVolunteerRepository _repository;
     private readonly ILogger<SoftDeleteVolunteerHandler> _logger;

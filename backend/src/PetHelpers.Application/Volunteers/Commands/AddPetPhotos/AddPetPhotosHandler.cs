@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetHelpers.Application.Abstractions;
 using PetHelpers.Application.Database;
 using PetHelpers.Application.Extensions;
 using PetHelpers.Application.Files;
@@ -7,9 +8,9 @@ using PetHelpers.Application.Messaging;
 using PetHelpers.Domain.Shared;
 using FileInfo = PetHelpers.Application.Files.FileInfo;
 
-namespace PetHelpers.Application.Volunteers.AddPetPhotos;
+namespace PetHelpers.Application.Volunteers.Commands.AddPetPhotos;
 
-public class AddPetPhotosHandler
+public class AddPetPhotosHandler : ICommandHandler<IReadOnlyList<FilePath>, AddPetPhotosCommand>
 {
     private const string BUCKET_NAME = "photos";
 

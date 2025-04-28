@@ -1,5 +1,5 @@
 ﻿using PetHelpers.Application.Dtos;
-using PetHelpers.Application.Volunteers.UpdateMainInfo;
+using PetHelpers.Application.Volunteers.Commands.UpdateMainInfo;
 
 namespace PetHelpers.API.Controllers.Volunteers.Requests;
 

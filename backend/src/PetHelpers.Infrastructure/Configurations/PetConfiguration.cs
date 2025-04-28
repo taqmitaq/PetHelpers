@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHelpers.Application.Dtos;
 using PetHelpers.Domain.Shared;
@@ -52,19 +50,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired();
 
         builder.Property(p => p.Requisites)
-            .HasConversion(
-                requisites => JsonSerializer.Serialize(
-                    requisites.Select(
-                        r => new RequisiteDto(r.Title.Text, r.Description.Text)),
-                    JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<List<RequisiteDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(dto => new Requisite(Title.Create(dto.Title).Value, Description.Create(dto.Description).Value))
-                    .ToList(),
-                new ValueComparer<IReadOnlyList<Requisite>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
-                    c => c.ToList()))
-            .HasColumnType("jsonb")
+            .ValueObjectsCollectionJsonConversion(
+                requisite => new RequisiteDto(requisite.Title, requisite.Description),
+                dto => new Requisite(dto.Title, dto.Description))
             .HasColumnName("requisites");
 
         builder.ComplexProperty(p => p.PetName, b =>
@@ -143,19 +131,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         });
 
         builder.Property(p => p.Photos)
-            .HasConversion(
-                photos => JsonSerializer.Serialize(
-                    photos.Select(
-                        p => new PhotoDto(p.PathToStorage)),
-                    JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<List<PhotoDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(dto => Photo.Create(dto.PathToStorage).Value)
-                    .ToList(),
-                new ValueComparer<IReadOnlyList<Photo>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
-                    c => c.ToList()))
-            .HasColumnType("jsonb")
+            .ValueObjectsCollectionJsonConversion(
+                photo => new PhotoDto(photo.PathToStorage),
+                dto => Photo.Create(dto.PathToStorage).Value)
             .HasColumnName("photos");
     }
 }

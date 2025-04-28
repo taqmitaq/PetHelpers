@@ -21,15 +21,14 @@ public static class Inject
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<WriteDbContext>();
-        services.AddScoped<ISpeciesRepository, SpeciesRepository>();
-        services.AddScoped<IVolunteerRepository, VolunteerRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IFileCleanerService, FileCleanerService>();
-        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
-        services.AddHostedService<FileCleanerBackgroundService>();
-
-        services.AddMinio(configuration);
+        services
+            .AddDbContexts()
+            .AddMinio(configuration)
+            .AddRepositories()
+            .AddDatabase()
+            .AddHostedServices()
+            .AddMessageQueues()
+            .AddServices();
 
         return services;
     }
@@ -51,6 +50,54 @@ public static class Inject
         });
 
         services.AddScoped<IFileProvider, MinioProvider>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IFileCleanerService, FileCleanerService>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddMessageQueues(this IServiceCollection services)
+    {
+        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddHostedServices(this IServiceCollection services)
+    {
+        services.AddHostedService<FileCleanerBackgroundService>();
+
+        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddDatabase(this IServiceCollection services)
+    {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
+
+        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+        services.AddScoped<ISpeciesRepository, SpeciesRepository>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddDbContexts(this IServiceCollection services)
+    {
+        services.AddScoped<WriteDbContext>();
 
         return services;
     }

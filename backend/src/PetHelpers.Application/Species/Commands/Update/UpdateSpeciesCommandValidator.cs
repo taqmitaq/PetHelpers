@@ -2,7 +2,7 @@
 using PetHelpers.Application.Validation;
 using PetHelpers.Domain.Shared;
 
-namespace PetHelpers.Application.Species.Update;
+namespace PetHelpers.Application.Species.Commands.Update;
 
 public class UpdateSpeciesCommandValidator : AbstractValidator<UpdateSpeciesCommand>
 {

@@ -3,7 +3,7 @@ using PetHelpers.Application.Validation;
 using PetHelpers.Domain.Shared;
 using PetHelpers.Domain.Volunteer.ValueObjects;
 
-namespace PetHelpers.Application.Volunteers.Create;
+namespace PetHelpers.Application.Volunteers.Commands.Create;
 
 public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteerCommand>
 {
